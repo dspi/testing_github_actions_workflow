@@ -13,8 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          fetch-depth: 0  # Ensure the full git history is cloned
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -25,12 +24,7 @@ jobs:
         run: npm install
 
       - name: Execute update script
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git clone git@github.com:${{ github.repository }}.wiki.git .wiki
-          cd .wiki
-          echo "# New Page Title\nThis is the content of the new page." > NewPage.md
-          git add NewPage.md
-          git commit -m "Update wiki via GitHub Actions"
-          git push origin HEAD:master
+        run: node update-wiki.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Default GitHub token provided by Actions
+          GITHUB_REPOSITORY: ${{ github.repository }}  # Pass the repository info to the script
