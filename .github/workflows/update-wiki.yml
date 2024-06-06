@@ -30,3 +30,4 @@ jobs:
         run: npm start
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
