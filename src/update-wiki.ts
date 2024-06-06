@@ -18,7 +18,7 @@ try {
 
     // Create or update a wiki page
     const pageContent = "# New Page Title\nThis is the content of the new page.";
-    execSync(`echo "${pageContent}" > NewPage.md`);
+    execSync(`echo "${pageContent}" > NewPage2.md`);
 
     // Commit and push the changes
     execSync('git add NewPage2.md');
