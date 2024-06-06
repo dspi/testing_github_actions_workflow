@@ -1,0 +1,13 @@
+{
+  "name": "testing_github_actions_workflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "update-wiki.js",
+  "scripts": {
+    "start": "node update-wiki.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
