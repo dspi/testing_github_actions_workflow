@@ -13,7 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Use the automatically provided token for authentication
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fetch-depth: 0  # Ensure the full git history is cloned
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,10 +24,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set up Git
+      - name: Execute update script
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Execute update script
-        run: npm start
+          cd .wiki
+          echo "# New Page Title\nThis is the content of the new page." > NewPage.md
+          git add NewPage.md
+          git commit -m "Update wiki via GitHub Actions"
+          git push origin HEAD:master
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
