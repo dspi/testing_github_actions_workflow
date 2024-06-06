@@ -6,14 +6,6 @@ on:
       - main
 
 jobs:
-  test_token:
-    runs-on: ubuntu-latest
-    env:
-      GH_PAT: ${{ secrets.GH_PAT }}
-    steps:
-      - name: Print GitHub Token
-        run: echo $GH_PAT
-
   update-wiki:
     runs-on: ubuntu-latest
 
@@ -36,10 +28,9 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git clone git@github.com:${{ github.repository }}.wiki.git .wiki
           cd .wiki
           echo "# New Page Title\nThis is the content of the new page." > NewPage.md
           git add NewPage.md
           git commit -m "Update wiki via GitHub Actions"
           git push origin HEAD:master
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
