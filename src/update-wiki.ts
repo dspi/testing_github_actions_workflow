@@ -1,8 +1,8 @@
-const { execSync } = require('child_process');
+import {execSync} from 'child_process';
 
 // GitHub token and repository provided by the GitHub Actions runner
-const token = process.env.GITHUB_TOKEN;
-const repository = process.env.GITHUB_REPOSITORY; // Format: owner/repo
+const token = process.env['GITHUB_TOKEN'];
+const repository = process.env['GITHUB_REPOSITORY']; // Format: owner/repo
 const wikiUrl = `https://github-actions:${token}@github.com/${repository}.wiki.git`;
 
 try {

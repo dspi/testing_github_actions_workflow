@@ -1,4 +1,4 @@
-name: Update Wiki
+name: 🚀 Update Wiki
 
 on:
   push:
@@ -23,8 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build TypeScript
+        run: npm run build
+
       - name: Execute update script
-        run: node update-wiki.js
+        run: node update-wiki.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Default GitHub token provided by Actions
           GITHUB_REPOSITORY: ${{ github.repository }}  # Pass the repository info to the script
