@@ -21,7 +21,7 @@ try {
     execSync(`echo "${pageContent}" > NewPage.md`);
 
     // Commit and push the changes
-    execSync('git add NewPage.md');
+    execSync('git add NewPage2.md');
     execSync('git commit -m "Update wiki via GitHub Actions"');
     execSync('git push origin HEAD:master', { stdio: 'inherit' });
 
