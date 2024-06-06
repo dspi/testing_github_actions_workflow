@@ -24,7 +24,7 @@ jobs:
         run: npm install
 
       - name: Build TypeScript
-        run: npm run build
+        run: npm run build:all
 
       - name: Execute update script
         run: node update-wiki.ts
