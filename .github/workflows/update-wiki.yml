@@ -6,6 +6,12 @@ on:
       - main
 
 jobs:
+  test_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print GitHub Token
+        run: echo ${{ secrets.GITHUB_TOKEN }}
+
   update-wiki:
     runs-on: ubuntu-latest
 
