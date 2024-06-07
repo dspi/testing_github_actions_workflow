@@ -2,9 +2,9 @@
   "name": "testing_github_actions_workflow",
   "version": "1.0.0",
   "description": "",
-  "main": ".build/update-wiki.js",
+  "main": ".build/index.js",
   "scripts": {
-    "start": "node .build/update-wiki.js",
+    "start": "node .build/index.js",
     "test": "echo \"This project does not yet have any tests. Skipping...\"",
     "lint": "npx eslint src",
     "lint:fix": "npx eslint --fix src",

@@ -1,4 +1,4 @@
-name: 🚀 Update Wiki
+name: 🚀 Update wiki
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
         run: npm run build:all
 
       - name: Execute update script
-        run: node ./.build/update-wiki.js
+        run: node ./.build/index.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Default GitHub token provided by Actions
           GITHUB_REPOSITORY: ${{ github.repository }}  # Pass the repository info to the script
