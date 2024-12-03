@@ -40,9 +40,12 @@ jobs:
 
       - name: Compile TypeScript
         run: npm run build:all
-        
+
+      - name: List Build Directory #TEST TO CHECK IF COMPILATION WORKED
+        run: ls -R .build
+     
       - name: Run Collection Rename Script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
-          node ./.build/scripts/renameCollections.js "${{ github.event.inputs.prefix }}"          
+          node ./build/scripts/renameCollections.js "${{ github.event.inputs.prefix }}"          
