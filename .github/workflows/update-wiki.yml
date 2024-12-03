@@ -1,9 +1,10 @@
 name: 🚀 Update wiki
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - main
 
 jobs:
   update-wiki:
