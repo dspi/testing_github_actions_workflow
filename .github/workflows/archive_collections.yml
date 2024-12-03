@@ -31,6 +31,6 @@ jobs:
 
       - name: Set up MongoDB Environment Variables
         run: |
-          echo "MONGO_URI=${{ secrets['MONGO_URI_' + github.event.inputs.environment] }}" >> $GITHUB_ENV
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
         env:
           environment: ${{ github.event.inputs.environment }}
