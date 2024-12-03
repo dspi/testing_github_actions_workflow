@@ -2,7 +2,12 @@ name: 🗃️ Archive (Rename) MongoDB Collections
 
 on:
   workflow_dispatch:
-    inputs:       
+    inputs:
+      script:
+        description: 'Script to run (choose from scripts/ directory)'
+        required: true
+        default: 'renameCollections'
+    
       environment:
         description: 'Select the deployment environment'
         type: choice
@@ -44,8 +49,14 @@ jobs:
       - name: List Build Directory #TEST TO CHECK IF COMPILATION WORKED
         run: ls -R .build
      
-      - name: Run Collection Rename Script
+      # - name: Run Collection Rename Script
+      #   env:
+      #     MONGO_URI: ${{ secrets.MONGO_URI }}
+      #   run: |
+      #     node ./.build/scripts/renameCollections.js "${{ github.event.inputs.prefix }}"
+
+      - name: Run Script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: |
-          node ./.build/scripts/renameCollections.js "${{ github.event.inputs.prefix }}"          
+        run: node ./.build/scripts/"${{ github.event.inputs.script }}".js "${{ github.event.inputs.prefix }}"
+        # run: bash ${{ github.event.inputs.script }} params.json
