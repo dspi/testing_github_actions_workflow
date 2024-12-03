@@ -1,8 +1,8 @@
-name: 🗃️ Archive Collections (Rename)
+name: 🗃️ Archive (Rename) MongoDB Collections
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs:       
       environment:
         description: 'Select the deployment environment'
         type: choice
@@ -14,21 +14,23 @@ on:
           - prev
           - prod
 
+      prefix:
+        description: 'Prefix to append for renaming collections'
+        required: true
+        default: 'archived_'          
+
 jobs:
-  deploy:
-    name: Deploy to Environment
+  rename-collections:
+    name: Rename Collections
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Run deploy script
+      - name: Set up MongoDB Environment Variables
         run: |
-          echo "Deploying to environment: ${{ github.event.inputs.environment }}"
-          echo "Connecting to MongoDB with URI: $MONGO_URI"
-          node ./scripts/deploy.js
+          echo "MONGO_URI=${{ secrets.MONGO_URI_${{ github.event.inputs.environment }} }}" >> $GITHUB_ENV
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          ENVIRONMENT: ${{ github.event.inputs.environment }}
+          environment: ${{ github.event.inputs.environment }}
