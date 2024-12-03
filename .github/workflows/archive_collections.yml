@@ -35,6 +35,12 @@ jobs:
         env:
           environment: ${{ github.event.inputs.environment }}
 
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Compile TypeScript
+        run: npm run build
+        
       - name: Run Collection Rename Script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
