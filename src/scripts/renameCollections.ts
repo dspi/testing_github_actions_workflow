@@ -15,7 +15,9 @@ export const renameCollections = async (collections: string[], prefix: string): 
                 if (error instanceof Error) {
                     console.error(`Failed to rename collection ${oldName}:`, error.message);
                 }
-                console.error(`Failed to rename collection ${oldName}`);
+                else {
+                    console.error(`Failed to rename collection ${oldName}`);
+                }
             }
         }
     } catch (error) {
