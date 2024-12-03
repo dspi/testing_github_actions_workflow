@@ -45,4 +45,4 @@ jobs:
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
-          node ./scripts/renameCollections.js "${{ github.event.inputs.prefix }}"          
+          node ./build/renameCollections.js "${{ github.event.inputs.prefix }}"          
