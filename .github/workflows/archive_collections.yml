@@ -34,3 +34,9 @@ jobs:
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
         env:
           environment: ${{ github.event.inputs.environment }}
+
+      - name: Run Collection Rename Script
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: |
+          node ./scripts/renameCollections.js "${{ github.event.inputs.prefix }}"          
