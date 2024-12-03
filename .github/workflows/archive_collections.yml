@@ -1,0 +1,33 @@
+name: 🗃️ Archive Collections (Rename)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the deployment environment'
+        required: true
+        default: 'test'
+        options:
+          - test
+          - acc
+          - prev
+          - prod
+
+jobs:
+  deploy:
+    name: Deploy to Environment
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run deploy script
+        run: |
+          echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+          echo "Connecting to MongoDB with URI: $MONGO_URI"
+          node ./scripts/deploy.js
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
