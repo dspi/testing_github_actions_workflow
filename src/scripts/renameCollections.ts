@@ -13,7 +13,7 @@ export const renameCollections = async (collections: string[], prefix: string): 
                 await db.collection(oldName).rename(newName);
             } catch (error) {
                 if (error instanceof Error) {
-                    console.error(`Failed to rename collection ${oldName}`, error.message);
+                    console.error(`Failed to rename collection ${oldName}:`, error.message);
                 }
                 console.error(`Failed to rename collection ${oldName}`);
             }
