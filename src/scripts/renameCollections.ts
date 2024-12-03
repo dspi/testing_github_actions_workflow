@@ -1,4 +1,4 @@
-import {closeDB, connectToDB, getDB} from '../utils/mongodb';
+import {closeDB, connectToDB/*, getDB*/} from '../utils/mongodb';
 
 export const renameCollections = async (collections: string[], prefix: string): Promise<void> => {
     console.log('This is "renameCollections"');
