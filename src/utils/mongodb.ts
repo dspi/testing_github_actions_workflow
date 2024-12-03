@@ -15,12 +15,12 @@ export const connectToDB = async (): Promise<Db> => {
     return db!;
 };
 
-export const getDB = (): any => {
-    if (!db) {
-        throw new Error('Database not connected. Please call connectToDB() first.');
-    }
-    return db;
-};
+// export const getDB = (): any => {
+//     if (!db) {
+//         throw new Error('Database not connected. Please call connectToDB() first.');
+//     }
+//     return db;
+// };
 
 export const closeDB = async (): Promise<void> => {
     if (client) {
