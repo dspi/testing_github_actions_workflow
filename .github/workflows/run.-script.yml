@@ -15,6 +15,7 @@ on:
         default: 'test'
         options:
           - test
+          - dev
           - acc
           - prev
           - prod
