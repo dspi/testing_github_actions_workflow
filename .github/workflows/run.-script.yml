@@ -6,7 +6,7 @@ on:
       script:
         description: 'Script to run (choose from scripts/ directory)'
         required: true
-        default: 'renameCollections'
+        # default: 'renameCollections'
     
       environment:
         description: 'Select the deployment environment'
@@ -19,10 +19,10 @@ on:
           - prev
           - prod
 
-      prefix:
-        description: 'Prefix to append for renaming collections'
-        required: true
-        default: 'archived_'          
+      # prefix:
+      #   description: 'Prefix to append for renaming collections'
+      #   required: true
+      #   default: 'archived_'          
 
 jobs:
   run-script:
