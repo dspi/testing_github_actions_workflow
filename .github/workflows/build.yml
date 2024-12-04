@@ -2,10 +2,10 @@ name: 🤖 Build Runtime
 
 on:
   workflow_dispatch:    # Trigger manually
-  pull_request:         # Trigger on pull request
-  push:                 # Trigger on push to main branch
-    branches:
-      - main
+  # pull_request:         # Trigger on pull request
+  # push:               # Trigger on push to main branch
+    # branches:
+    #  - main
 
 jobs:
   build:
