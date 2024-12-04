@@ -14,15 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Install Dependencies
+      - name: ⬇️ Install Dependencies
         run: npm install
 
-      - name: Compile TypeScript
+      - name: 🛠 Compile TypeScript
         run: npm run build:all
         
-    # Instead of runs-on, and steps above:
+    # This is just a demo, but instead of runs-on, and steps above:
     # A COMPANY could standardise a complex process in a reusable workflow as follows:
+
     # uses: COMPANY/cp-templates/.github/workflows/nodejs-runtime-build.yml@master
     # secrets: inherit
     # with:
     #   node_version: "20"
+
+    # The reusable workflow could do many things such as 🔖generate a build tag,
+    # 🏎️ restore node modules cache ⬇️ install dependencies, 😍 check code formatting,
+    # 🕵️ run linting, ✅ run tests, 📁 archive code coverage artefacts, 🛠 compile typescript,
+    # 🚀 create release, 📂 archive build artifact, 📁 package release artifacts, ⬆️ upload release asset
