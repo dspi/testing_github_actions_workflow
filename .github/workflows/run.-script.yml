@@ -34,11 +34,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up MongoDB Environment Variables
-        run: |
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
-        env:
-          environment: ${{ github.event.inputs.environment }}
+      # The env block in a step defines environment variables for that specific step.
+      # The echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV approach is useful for setting
+      # environment variables globally across multiple steps. However, in this case, MONGO_URI is only
+      # used in the Run Script step, so there's no need for this extra setup step.
+      # - name: Set up MongoDB Environment Variables
+      #   run: |
+      #     echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+      #   env:
+      #     environment: ${{ github.event.inputs.environment }}
 
       - name: Install Dependencies
         run: npm install
