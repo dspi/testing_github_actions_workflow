@@ -3,18 +3,18 @@ import * as path from 'path';
 
 const scriptPath = process.argv[2]; // Path to the script passed as an argument
 
-// // Ensure the script file exists
-// if (!fs.existsSync(scriptPath)) {
-//     throw new Error(`Script at ${scriptPath} not found`);
-// }
-
-// Dynamically import the script
-const script = require(path.resolve(scriptPath));
-
-// Ensure the 'run' function exists and is of the correct type
-if (typeof script.run !== 'function') {
-    throw new Error(`Script must export a 'run' function`);
+// Ensure the script file exists
+if (!fs.existsSync(scriptPath)) {
+    throw new Error(`Script at ${scriptPath} not found`);
 }
+
+// // Dynamically import the script
+// const script = require(path.resolve(scriptPath));
+
+// // Ensure the 'run' function exists and is of the correct type
+// if (typeof script.run !== 'function') {
+//     throw new Error(`Script must export a 'run' function`);
+// }
 
 // // Check that the return type of run() is Promise<string>
 // const returnType = typeof script.run();
