@@ -84,9 +84,14 @@ jobs:
           fi
 
           # Check if the script contains 'export function run' or 'export const run'
-          if ! grep -q "export.*run(" "$TS_SCRIPT_PATH"; then
-            echo "Error: Script must export a 'run' function" >&2
-            exit 1  # Exit if validation fails
+          # check for both function declarations and arrow function exports
+          # if ! grep -q "export.*run(" "$TS_SCRIPT_PATH"; then
+          #   echo "Error: Script must export a 'run' function" >&2
+          #   exit 1  # Exit if validation fails
+          # fi
+          if ! grep -qE "export\s+const\s+run\s*=\s*\(.*\)\s*=>" "$SCRIPT_PATH" && ! grep -q "export\s+function\s+run\s*(" "$SCRIPT_PATH"; then
+            echo "Error: The script must export a 'run' function."
+            exit 1
           fi
 
           # Validate return type of run function
