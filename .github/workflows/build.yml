@@ -1,0 +1,28 @@
+name: 🤖 Build Runtime
+
+on:
+  workflow_dispatch:    # Trigger manually
+  pull_request:         # Trigger on pull request
+  push:                 # Trigger on push to main branch
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Compile TypeScript
+        run: npm run build:all
+        
+    # Instead of runs-on, and steps above:
+    # A COMPANY could standardise a complex process in a reusable workflow as follows:
+    # uses: COMPANY/cp-templates/.github/workflows/nodejs-runtime-build.yml@master
+    # secrets: inherit
+    # with:
+    #   node_version: "20"
