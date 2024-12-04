@@ -45,7 +45,7 @@ jobs:
       #   env:
       #     environment: ${{ github.event.inputs.environment }}
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Transpile TypeScript
@@ -55,7 +55,7 @@ jobs:
       - name: List Build Directory
         run: ls -R .build
 
-      - name: Resolve and Validate Script
+      - name: Validate script
         id: validate-script
         run: |
           SCRIPT_NAME="${{ github.event.inputs.script }}"
@@ -129,7 +129,7 @@ jobs:
 
 
      
-      - name: Run Script
+      - name: Run script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: node ${{ env.script_path }}
