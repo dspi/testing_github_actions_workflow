@@ -73,6 +73,17 @@ jobs:
             exit 1
           fi
 
+          # NOW FOR SOME VALIDATION THAT THE ts file has a run function and that it returns a String
+          TS_SCRIPT_NAME="${SCRIPT_NAME%.js}.ts"          
+          TS_BASE_PATH="./scripts"
+          TS_SCRIPT_PATH="$TS_BASE_PATH/$TS_SCRIPT_NAME"
+
+          if [[ ! -f "$TS_SCRIPT_PATH" ]]; then
+            echo "Error: TypeScript script '$TS_SCRIPT_PATH' does not exist."
+            exit 1
+          fi
+
+
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
      
