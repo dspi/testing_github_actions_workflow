@@ -6,7 +6,7 @@ on:
       script:
         description: 'Script to run (choose from scripts/ directory)'
         required: true
-        # default: 'renameCollections'
+        default: 'saySomething'
     
       environment:
         description: 'Select the deployment environment'
