@@ -86,6 +86,16 @@ jobs:
 
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
+
+
+
+
+      - name: Validate script before execution
+        run: |
+          node ./validate-script.ts $TS_SCRIPT_PATH
+        
+
+
      
       - name: Run Script
         env:
