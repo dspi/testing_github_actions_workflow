@@ -50,7 +50,8 @@ jobs:
       - name: Compile TypeScript
         run: npm run build:all
 
-      - name: List Build Directory #TEST TO CHECK IF COMPILATION WORKED
+      # TEST TO CHECK IF COMPILATION WORKED
+      - name: List Build Directory
         run: ls -R .build
 
       - name: Resolve and Validate Script
@@ -75,15 +76,7 @@ jobs:
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
      
-      # - name: Run Collection Rename Script
-      #   env:
-      #     MONGO_URI: ${{ secrets.MONGO_URI }}
-      #   run: |
-      #     node ./.build/scripts/renameCollections.js "${{ github.event.inputs.prefix }}"
-
       - name: Run Script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: node ${{ env.script_path }}
-        #run: node ./.build/scripts/"${{ github.event.inputs.script }}".js "${{ github.event.inputs.prefix }}"
-        # run: bash ${{ github.event.inputs.script }} params.json
