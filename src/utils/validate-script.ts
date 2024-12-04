@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as path from 'path';
+//import * as path from 'path';
 
 const scriptPath = process.argv[2]; // Path to the script passed as an argument
 
