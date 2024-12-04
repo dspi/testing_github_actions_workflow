@@ -5,7 +5,7 @@
 
 export const run = (something: string) =>  {
     console.log(something);
-    //return `SUCCESS...wrote "${something}"`;
+    return `SUCCESS...wrote "${something}"`;
 }
 
 run('This is the saySomethiing script!');
