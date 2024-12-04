@@ -1,45 +1,26 @@
-import * as fs from 'fs';
-//import * as path from 'path';
+import path from 'path';
 
-const scriptPath = process.argv[2]; // Path to the script passed as an argument
+export async function validateScript(scriptName: string): Promise<void> {
+    try {
+        // Construct the path to the script file
+        const scriptPath = path.resolve(__dirname, `./scripts/${scriptName}`);
 
-export const validate = () => {
+        // Dynamically load the script
+        const script = require(scriptPath);
 
+        // Validate if the script has a 'run' function
+        if (typeof script.run !== 'function') {
+            throw new Error(`Script "${scriptName}" must export a 'run' function.`);
+        }
 
-
-// Ensure the script file exists
-    if (!scriptPath || (scriptPath && !fs.existsSync(scriptPath))) {
-        throw new Error(`Script at ${scriptPath} not found`);
+        console.log(`Script "${scriptName}" has a valid 'run' function.`);
+    } catch (error) {
+        // Handle errors (either loading the script or missing 'run' function)
+        if (error instanceof Error) {
+            throw new Error(`Failed to rename collection "${scriptName}": ${error.message}`);
+        }
+        else {
+            throw new Error(`Failed to validate script "${scriptName}"`);
+        }
     }
-
-// // // Dynamically import the script
-//     const script = require(path.resolve(scriptPath));
-//
-// // Ensure the 'run' function exists and is of the correct type
-//     if (typeof script.run !== 'function') {
-//         throw new Error(`Script must export a 'run' function`);
-//     }
-    const script = require(`./scripts/${scriptPath}`);
-
-// If the script doesn't export a 'run' function, throw an error
-    if (typeof script.run !== 'function') {
-        throw new Error(`Script ${scriptPath} must export a 'run' function`);
-    }    
-    
-
-// // Check that the return type of run() is Promise<string>
-// const returnType = typeof script.run();
-// if (returnType !== 'object' || !script.run().then) {
-//     throw new Error(`The 'run' function must return a Promise (e.g., Promise<string>)`);
-// }
-
-// // Optionally, check that the Promise resolves to a string (non-empty)
-// script.run().then(output => {
-//     if (typeof output !== 'string' || output.trim().length === 0) {
-//         throw new Error(`The 'run' function must resolve to a non-empty string`);
-//     }
-//});
-
-    console.log('Script validated successfully');
-
 }
