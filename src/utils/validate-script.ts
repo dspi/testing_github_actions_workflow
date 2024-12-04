@@ -4,21 +4,21 @@ import * as path from 'path';
 const scriptPath = process.argv[2]; // Path to the script passed as an argument
 
 export const validate = () => {
-    
+
 
 
 // Ensure the script file exists
-if (scriptPath && !fs.existsSync(scriptPath)) {
-    throw new Error(`Script at ${scriptPath} not found`);
-}
+    if (!scriptPath || (scriptPath && !fs.existsSync(scriptPath))) {
+        throw new Error(`Script at ${scriptPath} not found`);
+    }
 
 // // Dynamically import the script
-const script = require(path.resolve(scriptPath));
+    const script = require(path.resolve(scriptPath));
 
 // Ensure the 'run' function exists and is of the correct type
-if (typeof script.run !== 'function') {
-    throw new Error(`Script must export a 'run' function`);
-}
+    if (typeof script.run !== 'function') {
+        throw new Error(`Script must export a 'run' function`);
+    }
 
 // // Check that the return type of run() is Promise<string>
 // const returnType = typeof script.run();
@@ -33,6 +33,6 @@ if (typeof script.run !== 'function') {
 //     }
 //});
 
-console.log('Script validated successfully');
+    console.log('Script validated successfully');
 
 }
