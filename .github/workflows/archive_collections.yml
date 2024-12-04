@@ -1,4 +1,4 @@
-name: 🗃️ Archive (Rename) MongoDB Collections
+name: ▶️ Run script
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ on:
         default: 'archived_'          
 
 jobs:
-  rename-collections:
+  run-script:
     name: Rename Collections
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
@@ -33,6 +33,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Resolve and Validate Script
+        id: validate-script
+        run: |
+          SCRIPT_NAME="${{ github.event.inputs.script }}"
+          BASE_PATH="./.build/scripts"
+          
+          # Ensure .js extension is present
+          if [[ "$SCRIPT_NAME" != *.js ]]; then
+            SCRIPT_NAME="$SCRIPT_NAME.js"
+          fi
+          
+          SCRIPT_PATH="$BASE_PATH/$SCRIPT_NAME"
+
+          # Validate that the resolved script exists
+          if [[ ! -f "$SCRIPT_PATH" ]]; then
+            echo "Error: Script '$SCRIPT_PATH' does not exist."
+            exit 1
+          fi
+
+          # Save the resolved script path for later steps
+          echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
 
       - name: Set up MongoDB Environment Variables
         run: |
@@ -58,5 +80,6 @@ jobs:
       - name: Run Script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: node ./.build/scripts/"${{ github.event.inputs.script }}".js "${{ github.event.inputs.prefix }}"
+        run: node ${{ env.script_path }}
+        #run: node ./.build/scripts/"${{ github.event.inputs.script }}".js "${{ github.event.inputs.prefix }}"
         # run: bash ${{ github.event.inputs.script }} params.json
