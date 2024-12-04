@@ -92,7 +92,7 @@ jobs:
 
       - name: Validate script before execution
         run: |
-          node ./validate-script.ts $TS_SCRIPT_PATH
+          node ./utils/validate-script.js $TS_SCRIPT_PATH
         
 
 
