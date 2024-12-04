@@ -68,7 +68,7 @@ jobs:
           
           SCRIPT_PATH="$BASE_PATH/$SCRIPT_NAME"
 
-          # Validate that the resolved script exists
+          # Validate that the script exists
           if [[ ! -f "$SCRIPT_PATH" ]]; then
             echo "Error: Script '$SCRIPT_PATH' does not exist."
             exit 1
