@@ -98,36 +98,8 @@ jobs:
             exit 1
           fi
 
-
-
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
-
-
-
-
-      # - name: Validate script before execution
-      #   run: |
-      #     node ./.build/utils/validate-script.js $TS_SCRIPT_PATH
-      # Step 1: Validate if the script has a 'run' function
-      # - name: Validate script for 'run' function
-      #   id: validate_script
-      #   run: |
-      #     # Path to the script
-      #     # script_path="./src/scripts/${{ github.event.inputs.script_name }}.ts"
-      #     # script_path="$TS_SCRIPT_PATH"
-      #     script_path="./src/scripts/saySomething.ts"
-          
-      #     # Check if the script contains 'export function run' or 'export const run'
-      #     if ! grep -q "export.*run(|export.*runn = (" "$script_path"; then
-      #       echo "Error: Script must export a 'run' function" >&2
-      #       exit 1  # Exit if validation fails
-      #     else
-      #       echo "Validation passed: 'run' function found in script."
-      #     fi
-          
-
-
      
       - name: Run script
         env:
