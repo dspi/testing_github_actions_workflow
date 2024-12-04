@@ -26,7 +26,7 @@ on:
 
 jobs:
   run-script:
-    name: Rename Collections
+    name: Run script
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
 
@@ -75,7 +75,7 @@ jobs:
 
           # NOW FOR SOME VALIDATION THAT THE ts file has a run function and that it returns a String
           TS_SCRIPT_NAME="${SCRIPT_NAME%.js}.ts"          
-          TS_BASE_PATH="./scripts"
+          TS_BASE_PATH="./src/scripts"
           TS_SCRIPT_PATH="$TS_BASE_PATH/$TS_SCRIPT_NAME"
 
           if [[ ! -f "$TS_SCRIPT_PATH" ]]; then
