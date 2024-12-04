@@ -87,9 +87,16 @@ jobs:
           if ! grep -q "export.*run(" "$TS_SCRIPT_PATH"; then
             echo "Error: Script must export a 'run' function" >&2
             exit 1  # Exit if validation fails
-          else
-            echo "Validation passed: 'run' function found in script."
           fi
+
+          # Validate return type of run function
+          # Use grep to ensure the script's run function returns either a string or string[]
+          if ! grep -q "return.*(.*string.*|\[.*string.*\])" "$TS_SCRIPT_PATH"; then
+            echo "Error: The 'run' function must return either a string or an array of strings."
+            exit 1
+          fi
+
+
 
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
