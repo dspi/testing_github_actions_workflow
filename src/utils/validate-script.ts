@@ -3,6 +3,10 @@ import * as fs from 'fs';
 
 const scriptPath = process.argv[2]; // Path to the script passed as an argument
 
+export const validate = () => {
+    
+
+
 // Ensure the script file exists
 if (scriptPath && !fs.existsSync(scriptPath)) {
     throw new Error(`Script at ${scriptPath} not found`);
@@ -30,3 +34,5 @@ if (scriptPath && !fs.existsSync(scriptPath)) {
 //});
 
 console.log('Script validated successfully');
+
+}
