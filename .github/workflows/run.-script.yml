@@ -117,7 +117,7 @@ jobs:
       #     script_path="./src/scripts/saySomething.ts"
           
       #     # Check if the script contains 'export function run' or 'export const run'
-      #     if ! grep -q "export.*run(" "$script_path"; then
+      #     if ! grep -q "export.*run(|export.*runn = (" "$script_path"; then
       #       echo "Error: Script must export a 'run' function" >&2
       #       exit 1  # Exit if validation fails
       #     else
