@@ -90,10 +90,25 @@ jobs:
 
 
 
-      - name: Validate script before execution
+      # - name: Validate script before execution
+      #   run: |
+      #     node ./.build/utils/validate-script.js $TS_SCRIPT_PATH
+      # Step 1: Validate if the script has a 'run' function
+      - name: Validate script for 'run' function
+        id: validate_script
         run: |
-          node ./.build/utils/validate-script.js $TS_SCRIPT_PATH
-        
+          # Path to the script
+          # script_path="./scripts/${{ github.event.inputs.script_name }}.ts"
+          script_path="$TS_SCRIPT_PATH"
+           
+          # Check if the script contains 'export function run' or 'export const run'
+          if ! grep -q "export.*run(" "$script_path"; then
+            echo "Error: Script must export a 'run' function" >&2
+            exit 1  # Exit if validation fails
+          else
+            echo "Validation passed: 'run' function found in script."
+          fi
+          
 
 
      
