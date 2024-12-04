@@ -89,7 +89,7 @@ jobs:
           #   echo "Error: Script must export a 'run' function" >&2
           #   exit 1  # Exit if validation fails
           # fi
-          if ! grep -qE "export\s+const\s+run\s*=\s*\(.*\)\s*=>" "$SCRIPT_PATH" && ! grep -q "export\s+function\s+run\s*(" "$SCRIPT_PATH"; then
+          if ! grep -qE "export\s+const\s+run\s*=\s*\(.*\)\s*=>" "$TS_SCRIPT_PATH" && ! grep -q "export\s+function\s+run\s*(" "$SCRIPT_PATH"; then
             echo "Error: The script must export a 'run' function."
             exit 1
           fi
