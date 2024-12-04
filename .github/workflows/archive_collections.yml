@@ -34,6 +34,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up MongoDB Environment Variables
+        run: |
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+        env:
+          environment: ${{ github.event.inputs.environment }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Compile TypeScript
+        run: npm run build:all
+
+      - name: List Build Directory #TEST TO CHECK IF COMPILATION WORKED
+        run: ls -R .build
+
       - name: Resolve and Validate Script
         id: validate-script
         run: |
@@ -55,21 +70,6 @@ jobs:
 
           # Save the resolved script path for later steps
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
-
-      - name: Set up MongoDB Environment Variables
-        run: |
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
-        env:
-          environment: ${{ github.event.inputs.environment }}
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Compile TypeScript
-        run: npm run build:all
-
-      - name: List Build Directory #TEST TO CHECK IF COMPILATION WORKED
-        run: ls -R .build
      
       # - name: Run Collection Rename Script
       #   env:
