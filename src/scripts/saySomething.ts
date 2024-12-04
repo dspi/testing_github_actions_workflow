@@ -1,5 +1,5 @@
-export const saySomething = (something: string) => {
+export const run = (something: string) => {
     console.log(something);
 }
 
-saySomething('This is the saySomethiing script!');
+run('This is the saySomethiing script!');
