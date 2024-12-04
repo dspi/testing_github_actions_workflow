@@ -21,6 +21,12 @@ export async function validateScript(scriptName: string): Promise<void> {
         console.log(`Script "${scriptName}" has a valid 'run' function.`);
     } catch (error) {
         // Handle errors (either reading the file or missing 'run' function)
-        throw new Error(`Failed to validate script "${scriptName}". ${error.message}`);
+        if (error instanceof Error) {
+            throw new Error(`Failed to rename collection "${scriptName}": ${error.message}`);
+        }
+        else {
+            throw new Error(`Failed to validate script "${scriptName}"`);
+        }
     }
+    
 }
