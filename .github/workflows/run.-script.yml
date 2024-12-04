@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       script:
-        description: 'Script to run (choose from `src/scripts/`)'
+        description: 'Script to run (choose from src/scripts/)'
         required: true
         default: 'saySomething'
     
