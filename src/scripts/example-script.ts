@@ -1,6 +1,6 @@
 import { ScriptRunResult, Status } from "../definitions";
 
-export const run = (something: string): ScriptRunResult => {
+export const run = (): ScriptRunResult => {
     const runResult = {
         overallStatus: Status.FAILURE,
         details: [
@@ -10,9 +10,10 @@ export const run = (something: string): ScriptRunResult => {
         ]
     };
 
-    console.log(something);
+    //test
+    console.log(JSON.stringify(runResult));
     //return [`Example: "${something}"`, `Example: 'run' must return 'string' or 'string[]'`];
     return runResult;
 };
 
-run(`Scripts must have a run function`);
+run();
