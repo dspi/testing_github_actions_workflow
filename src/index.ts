@@ -1,4 +1,4 @@
-import {updateWiki} from "./wiki";
+import {updateWiki} from "./lib/wiki";
 
 // GitHub token and repository provided by the GitHub Actions runner
 const token = process.env['GITHUB_TOKEN'];
