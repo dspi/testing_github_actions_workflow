@@ -1,17 +1,16 @@
-import {execSync} from 'child_process';
+import { execSync } from "child_process";
 
-export function updateWiki(wikiUrl: string, pagePath: string, pageContent: string) {
-
+export const updateWiki = (wikiUrl: string, pagePath: string, pageContent: string) => {
     try {
         // Set git config
         execSync('git config --global user.name "github-actions[bot]"');
         execSync('git config --global user.email "github-actions[bot]@users.noreply.github.com"');
 
         // Clone the wiki repository
-        execSync(`git clone ${wikiUrl} .wiki`, {stdio: 'inherit'});
+        execSync(`git clone ${wikiUrl} .wiki`, { stdio: "inherit" });
 
         // Navigate to the wiki repository directory
-        process.chdir('.wiki');
+        process.chdir(".wiki");
 
         // Ensure the directories exist
         execSync(`mkdir -p $(dirname ${pagePath})`);
@@ -22,12 +21,16 @@ export function updateWiki(wikiUrl: string, pagePath: string, pageContent: strin
         // Commit and push the changes
         execSync(`git add ${pagePath}`);
         execSync('git commit -m "Update wiki via GitHub Actions"');
-        execSync('git push origin HEAD:master', {stdio: 'inherit'});
+        execSync("git push origin HEAD:master", { stdio: "inherit" });
 
-        console.log('Wiki updated successfully.');
+        //TEST
+        console.log(`pagePath: ${wikiUrl}`);
+        console.log(`pagePath: ${pagePath}`);
+        console.log(`pagePath: ${pageContent}`);
+
+        console.log("Wiki updated successfully.");
     } catch (error) {
-        console.error('Error updating wiki:', error);
+        console.error("Error updating wiki:", error);
         //process.exit(1);
     }
-
-}
+};
