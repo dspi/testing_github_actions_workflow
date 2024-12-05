@@ -13,8 +13,8 @@ export const run = (): ScriptRunResult => {
         ]
     };
 
-    //Is this needed to get the into the workflow?
-    //console.log(JSON.stringify(runResult));
+    //This needed to get the into the workflow!!!
+    console.log(JSON.stringify(runResult));
 
     return runResult;
 };
