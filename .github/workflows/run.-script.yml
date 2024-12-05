@@ -21,7 +21,7 @@ on:
 jobs:
   run-script:
     name: Run script
-    runs-on: [ self-hosted, build-runner-new ]
+    runs-on: ubuntu-latest # [ self-hosted, build-runner-new ]
     environment: ${{ github.event.inputs.environment }}
 
     steps:
