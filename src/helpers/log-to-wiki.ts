@@ -47,9 +47,9 @@ const getStatusIcon = (status: Status) => {
 
     return status === Status.SUCCESS
             ? Icon.SUCCESS
-            : scriptRunResult.overallStatus === Status.FAILURE
+            : status === Status.FAILURE
                 ? Icon.FAILURE
-                : scriptRunResult.overallStatus === Status.SKIPPED
+                : status === Status.SKIPPED
                     ? Icon.SKIPPED
                     : Icon.UNKNOWN;
 }
