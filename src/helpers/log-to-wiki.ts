@@ -23,6 +23,9 @@ const token = process.env['GITHUB_TOKEN'];
 const repository = process.env['GITHUB_REPOSITORY']; // Format: owner/repo
 const wikiReposUrl = `https://github-actions:${token}@github.com/${repository}.wiki.git`;
 
+//TEST
+console.log(`wikiReposUrl: ${wikiReposUrl}`);
+
 let scriptRunResult: ScriptRunResult;
 if (scriptOutput) {
     scriptRunResult = JSON.parse(scriptOutput) as ScriptRunResult;
