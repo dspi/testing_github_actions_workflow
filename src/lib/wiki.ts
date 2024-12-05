@@ -27,7 +27,7 @@ export function updateWiki(wikiUrl: string, pagePath: string, pageContent: strin
         console.log('Wiki updated successfully.');
     } catch (error) {
         console.error('Error updating wiki:', error);
-        process.exit(1);
+        //process.exit(1);
     }
 
 }
