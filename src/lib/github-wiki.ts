@@ -23,11 +23,6 @@ export const updateWiki = (wikiUrl: string, pagePath: string, pageContent: strin
         execSync('git commit -m "Update wiki via GitHub Actions"');
         execSync("git push origin HEAD:master", { stdio: "inherit" });
 
-        //TEST
-        console.log(`wikiUrl: ${wikiUrl}`);
-        console.log(`pagePath: ${pagePath}`);
-        console.log(`pageContent: ${pageContent}`);
-
         console.log("Wiki updated successfully.");
     } catch (error) {
         console.error("Error updating wiki:", error);
