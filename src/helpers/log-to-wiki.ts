@@ -84,11 +84,10 @@ export const createWikiSummary = () => {
     console.log(summary);
 
     //return summary;....or write to wiki
-    const today=  timestamp.substring(0,9);
-    const pagePath = `SCRIPT_RUNS:${today}`;
+    const today=  timestamp.substring(0,10);
+    const pagePath = `SCRIPT_RUNS:${today}.md`;
     updateWiki(wikiReposUrl, pagePath, summary);
 };
-
 
 
 //TEMP
