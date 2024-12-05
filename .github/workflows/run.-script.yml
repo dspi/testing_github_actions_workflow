@@ -6,54 +6,33 @@ on:
       script:
         description: 'Script to run (choose from src/scripts/)'
         required: true
-        default: 'saySomething'
-    
+
       environment:
         description: 'Select the deployment environment'
         type: choice
         required: true
-        default: 'test'
+        default: 'dev'
         options:
-          - test
           - dev
           - acc
           - prev
           - prod
 
-      # prefix:
-      #   description: 'Prefix to append for renaming collections'
-      #   required: true
-      #   default: 'archived_'          
-
 jobs:
   run-script:
     name: Run script
-    runs-on: ubuntu-latest # [ self-hosted, build-runner-new ]
+    runs-on: [ self-hosted, build-runner-new ]
     environment: ${{ github.event.inputs.environment }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # The env block in a step defines environment variables for that specific step.
-      # The echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV approach is useful for setting
-      # environment variables globally across multiple steps. However, in this case, MONGO_URI is only
-      # used in the Run Script step, so there's no need for this extra setup step.
-      # - name: Set up MongoDB Environment Variables
-      #   run: |
-      #     echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
-      #   env:
-      #     environment: ${{ github.event.inputs.environment }}
-
       - name: Install dependencies
         run: npm install
 
       - name: Transpile TypeScript
         run: npm run build:all
-
-      # TEST TO CHECK IF COMPILATION WORKED
-      - name: List Build Directory
-        run: ls -R .build
 
       - name: Validate script
         id: validate-script
@@ -74,34 +53,29 @@ jobs:
             exit 1
           fi
 
-          # NOW FOR SOME VALIDATION THAT THE ts file has a run function and that it returns a String
-          TS_SCRIPT_NAME="${SCRIPT_NAME%.js}.ts"          
-          TS_BASE_PATH="./src/scripts"
-          TS_SCRIPT_PATH="$TS_BASE_PATH/$TS_SCRIPT_NAME"
-
-          if [[ ! -f "$TS_SCRIPT_PATH" ]]; then
-            echo "Error: TypeScript script '$TS_SCRIPT_PATH' does not exist."
-            exit 1
-          fi
-
-          # Check if the script contains 'export function run' or 'export const run'
-          # Use grep to check for arrow functions, regular functions, and default exports
-          if ! grep -qE "export\s+(const\s+run\s*=|function\s+run\s*\()" "$TS_SCRIPT_PATH" && ! grep -q "export\s+default\s+run\s*\(" "$SCRIPT_PATH"; then
-            echo "Error: The script must export a 'run' function."
-            exit 1
-          fi
-
-          # Validate return type of run function
-          # Use grep to ensure the script's run function returns either a string or string[]
-          if ! grep -qE "export\s+(const\s+run\s*=|function\s+run\s*\()[^\)]*\)\s*:\s*(string|string\[\])" "$TS_SCRIPT_PATH" && ! grep -qE "export\s+default\s+run\s*\([^\)]*\)\s*:\s*(string|string\[\])" "$SCRIPT_PATH"; then
-            echo "Error: The 'run' function must return a type of 'string' or 'string[]'."
-            exit 1
-          fi
-
-          # Save the resolved script path for later steps
+          # Save for later steps
+          echo "script_name=$SCRIPT_NAME" >> $GITHUB_ENV
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
-     
+          
+
       - name: Run script
+        id: run-script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: node ${{ env.script_path }}
+        # run: node ${{ env.script_path }}
+        # make script output available to next step:
+        run: |
+          output=$(node ${{ env.script_path }})
+          echo "script_output=$output" >> $GITHUB_ENV
+
+      - name: Write to Wiki
+        #run: |
+        #  echo "The script output was: ${{ env.script_output }}"
+        run: node ./.build/helpers/log-to-wiki.js
+        env:
+          SCRIPT_NAME: ${{env.script_name}}
+          RUN_ENV: ${{ github.event.inputs.environment }}
+          RUN_INITIATOR: ${{ github.actor }}
+          SCRIPT_OUTPUT: ${{env.script_output}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # Default GitHub token provided by Actions
+          GITHUB_REPOSITORY: ${{ github.repository }} # Pass the repository info to the script
