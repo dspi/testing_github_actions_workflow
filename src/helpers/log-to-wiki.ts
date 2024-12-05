@@ -2,19 +2,6 @@ import { ScriptRunResult, Status } from "../definitions";
 import * as process from "node:process";
 import { updateWiki } from "../lib/github-wiki";
 
-//TEMP
-// const scriptRunResult: ScriptRunResult = {
-//     overallStatus: true,
-//     details: [
-//         { success: true, resource: "MongoDB collection 5", info: "Line 1 details." },
-//         { success: false, resource: "MongoDB collection 16", info: "Line 2 details." },
-//         { success: true, resource: "MongoDB collection 31", info: "Line 3 details." }
-//     ]
-// };
-//const scriptName = `test-script.js`;
-//const environment = `DEV`;
-//const initiator = `David Spiller TME`;
-
 const scriptName = process.env["SCRIPT_NAME"];
 const environment = process.env["RUN_ENV"];
 const scriptOutput = process.env["SCRIPT_OUTPUT"];
@@ -22,9 +9,6 @@ const initiator= process.env["RUN_INITIATOR"];
 const token = process.env['GITHUB_TOKEN'];
 const repository = process.env['GITHUB_REPOSITORY']; // Format: owner/repo
 const wikiReposUrl = `https://github-actions:${token}@github.com/${repository}.wiki.git`;
-
-//TEST
-console.log(`wikiReposUrl: ${wikiReposUrl}`);
 
 let scriptRunResult: ScriptRunResult;
 if (scriptOutput) {
@@ -59,31 +43,42 @@ const getStatusIcon = (status: Status) => {
 
 export const createWikiSummary = () => {
     const timestamp = new Date().toISOString();
-    let summary = ``;
-
-    let overViewTable = `# ${scriptName}:\n`;
+    
+    const overViewTableHeader = `# ${scriptName}:\n`;
+    const overViewTableContent = `| ${getStatusIcon(scriptRunResult.overallStatus)} | ${environment} | ${timestamp} | ${initiator} |\n`;
+    console.log(overViewTableHeader);
+    console.log(overViewTableContent);
+    
+    let overViewTable = overViewTableHeader;
     overViewTable += `| Run Status | Env | Timestamp | Initiator |\n`;
     overViewTable += `|:---:|:---:|:---:|:---|\n`;
-    overViewTable += `| ${getStatusIcon(scriptRunResult.overallStatus)} | ${environment} | ${timestamp} | ${initiator} |\n`;
+    overViewTable += overViewTableContent;
 
-    let detailsTable = `### Run details:\n`;
+    const detailsTableHeader = `### Run details:\n`;
+    console.log(detailsTableHeader);
+    
+    let detailsTable = detailsTableHeader;
     detailsTable += `| Status | Resource | Details |\n`;
     detailsTable += `|:---:|:---|:---|\n`;
 
     scriptRunResult.details.forEach((detail) => {
         const detailSuccessIcon = `${getStatusIcon(detail.status)}`;
-        detailsTable += `| ${detailSuccessIcon} | ${detail.resource} | ${detail.info} |\n`;
+        const detailsTableContent = `| ${detailSuccessIcon} | ${detail.resource} | ${detail.info} |\n`;
+        console.log(detailsTableContent);
+        detailsTable += detailsTableContent;
     });
 
+    const summaryEnd = `\n---\n`;
+    console.log(summaryEnd);
+    
+    let summary = ``;
     summary += overViewTable;
     summary += detailsTable;
-    summary += `\n---\n`;
+    summary += summaryEnd
+    
 
-    //TEMP
-    console.log("\n");
-    console.log(summary);
 
-    //return summary;....or write to wiki
+    //Write to wiki
     const today=  timestamp.substring(0,10);
     const pagePath = `SCRIPT_RUNS:${today}.md`;
     updateWiki(wikiReposUrl, pagePath, summary);
