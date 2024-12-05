@@ -1,5 +1,8 @@
 import { ScriptRunResult, Status } from "../definitions";
 
+/**
+ * All scripts must execute a run function, which returns a ScriptRunResult type.
+ */
 export const run = (): ScriptRunResult => {
     return {
         overallStatus: Status.FAILURE,
