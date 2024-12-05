@@ -75,7 +75,7 @@ jobs:
         env:
           SCRIPT_NAME: ${{env.script_name}}
           RUN_ENV: ${{ github.event.inputs.environment }}
-          RUN_INITIATOR: ${{ github.actor }}
+          RUN_INITIATOR: ${{ github.triggering_actor }}
           SCRIPT_OUTPUT: ${{env.script_output}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # Default GitHub token provided by Actions
           GITHUB_REPOSITORY: ${{ github.repository }} # Pass the repository info to the script
