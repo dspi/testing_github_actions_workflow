@@ -24,9 +24,9 @@ export const updateWiki = (wikiUrl: string, pagePath: string, pageContent: strin
         execSync("git push origin HEAD:master", { stdio: "inherit" });
 
         //TEST
-        console.log(`pagePath: ${wikiUrl}`);
+        console.log(`wikiUrl: ${wikiUrl}`);
         console.log(`pagePath: ${pagePath}`);
-        console.log(`pagePath: ${pageContent}`);
+        console.log(`pageContent: ${pageContent}`);
 
         console.log("Wiki updated successfully.");
     } catch (error) {
