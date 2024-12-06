@@ -8,6 +8,6 @@ import { ScriptRunResult } from "../definitions";
  * to ensure acceptable output before the script is run.
  * @param runResult
  */
-export const validate = (runResult:ScriptRunResult) => {
+export const validate = (runResult: ScriptRunResult) => {
     console.log(JSON.stringify(runResult));
-}
+};
