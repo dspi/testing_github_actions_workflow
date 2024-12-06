@@ -2,24 +2,32 @@ import { ScriptRunResult, Status } from "../definitions";
 import * as process from "node:process";
 import { updateWiki } from "../lib/github-wiki";
 
-const scriptName = process.env["SCRIPT_NAME"];
-const environment = process.env["RUN_ENV"];
-const scriptOutput = process.env["SCRIPT_OUTPUT"];
-const initiator = process.env["RUN_INITIATOR"];
-const token = process.env["GITHUB_TOKEN"];
-const repository = process.env["GITHUB_REPOSITORY"]; // Format: owner/repo
+const {
+    SCRIPT_NAME: scriptName,
+    RUN_ENV: environment,
+    SCRIPT_OUTPUT: scriptOutput,
+    RUN_INITIATOR: initiator,
+    GITHUB_TOKEN: token,
+    GITHUB_REPOSITORY: repository // Format: owner/repo
+} = process.env;
+
 const wikiReposUrl = `https://github-actions:${token}@github.com/${repository}.wiki.git`;
 
-let scriptRunResult: ScriptRunResult;
-if (scriptOutput) {
-    scriptRunResult = JSON.parse(scriptOutput) as ScriptRunResult;
-} else {
-    scriptRunResult = {
-        overallStatus: Status.UNKNOWN,
-        overallInfo: "No information returned from the script.",
-        details: [{ status: Status.SKIPPED, resource: "Unknown", info: "Unknown" }]
-    };
-}
+const buildScriptRunResult = (scriptOutput: string | undefined) => {
+    let scriptRunResult: ScriptRunResult;
+    if (scriptOutput) {
+        scriptRunResult = JSON.parse(scriptOutput) as ScriptRunResult;
+    } else {
+        scriptRunResult = {
+            overallStatus: Status.UNKNOWN,
+            overallInfo: "No information returned from the script.",
+            details: [{ status: Status.SKIPPED, resource: "Unknown", info: "Unknown" }]
+        };
+    }
+    return scriptRunResult;
+};
+
+const scriptRunResult = buildScriptRunResult(scriptOutput);
 
 const getStatusIcon = (status: Status) => {
     enum Icon {
