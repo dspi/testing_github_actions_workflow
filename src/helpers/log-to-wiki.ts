@@ -38,11 +38,9 @@ const getStatusIcon = (status: Status) => {
             : Icon.UNKNOWN;
 };
 
-export const createWikiSummary = () => {
-    const timestamp = new Date().toISOString();
-
+const buildRunOverview = (timestamp: Date) => {
     const overViewTableHeader = `# ${scriptName}:\n`;
-    const overViewTableContent = `| ${getStatusIcon(scriptRunResult.overallStatus)} | ${environment} | ${timestamp} | ${initiator} |\n`;
+    const overViewTableContent = `| ${getStatusIcon(scriptRunResult.overallStatus)} | ${environment} | ${timestamp.toISOString()} | ${initiator} |\n`;
     console.log(overViewTableHeader);
     console.log(overViewTableContent);
 
@@ -50,7 +48,10 @@ export const createWikiSummary = () => {
     overViewTable += `| Run Status | Env | Timestamp | Initiator |\n`;
     overViewTable += `|:---:|:---:|:---:|:---|\n`;
     overViewTable += overViewTableContent;
+    return overViewTable;
+};
 
+const buildRunInfo = () => {
     let runInfoTable = ``;
     if (scriptRunResult.overallInfo) {
         const runInfoContent = scriptRunResult.overallInfo;
@@ -60,7 +61,10 @@ export const createWikiSummary = () => {
         runInfoTable += `|:---|\n`;
         runInfoTable += `| ${runInfoContent} |\n`;
     }
+    return runInfoTable;
+};
 
+const buildRunDetails = () => {
     const detailsTableHeader = `### Run details:\n`;
     console.log(detailsTableHeader);
 
@@ -74,21 +78,20 @@ export const createWikiSummary = () => {
         console.log(detailsTableContent);
         detailsTable += detailsTableContent;
     });
-
-    const summaryEnd = `\n---\n`;
-    console.log(summaryEnd);
-
-    let summary = ``;
-    summary += overViewTable;
-    summary += runInfoTable;
-    summary += detailsTable;
-    summary += summaryEnd;
-
-    //Write to wiki
-    const today = timestamp.substring(0, 10);
-    const pagePath = `SCRIPT_RUNS:${today}.md`;
-    updateWiki(wikiReposUrl, pagePath, summary);
+    return detailsTable;
 };
 
-//TEMP
-createWikiSummary();
+const timestamp = new Date();
+const today = timestamp.toISOString().substring(0, 10);
+const pagePath = `SCRIPT_RUNS:${today}.md`;
+const overViewTable = buildRunOverview(timestamp);
+const runInfoTable = buildRunInfo();
+const detailsTable = buildRunDetails();
+
+let summary = ``;
+summary += overViewTable;
+summary += runInfoTable;
+summary += detailsTable;
+summary += `\n---\n`;
+
+updateWiki(wikiReposUrl, pagePath, summary);
