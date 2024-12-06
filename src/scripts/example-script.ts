@@ -7,6 +7,9 @@ import { validate } from "../helpers/validation";
  * 2 - call 'validate'.
  */
 
+//1 - Add script execution logic:
+
+//2 - Build up a ScriptRunResult object:
 const runResult: ScriptRunResult = {
     overallStatus: Status.FAILURE,
     overallInfo: "THIS IS JUST AN EXAMPLE SCRIPT!",
@@ -17,4 +20,5 @@ const runResult: ScriptRunResult = {
     ]
 };
 
+//3 - Pass ScriptRunResult object to validate:
 validate(runResult);
