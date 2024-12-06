@@ -14,7 +14,7 @@ const runResult: ScriptRunResult = {
     overallStatus: Status.FAILURE,
     overallInfo: "THIS IS JUST AN EXAMPLE SCRIPT!",
     details: [
-        { status: Status.SUCCESS, resource: "MongoDB AddOns collection1", info: "Update was successful" },
+        { status: Status.SUCCESS, resource: "MongoDB AddOns collection1", info: "Update was successful." },
         { status: Status.FAILURE, resource: "MongoDB AddOns collection2", info: "Update was not successful." },
         { status: Status.SKIPPED, resource: "MongoDB AddOns collection3", info: "Update didn't run!" }
     ]
