@@ -1,22 +1,20 @@
 import { ScriptRunResult, Status } from "../definitions";
+import { validate } from "../helpers/validation";
 
-/**
- * All scripts must execute a run function, which returns a ScriptRunResult type.
+/*
+ * Scripts will only be run by the 'Run script' GitHub Action if they
+ * 1 - import 'validate'.
+ * 2 - call 'validate'.
  */
-export const run = (): ScriptRunResult => {
-    const runResult = {
-        overallStatus: Status.FAILURE,
-        details: [
-            { status: Status.SUCCESS, resource: "MongoDB collection 5", info: "Line 1 blah was successful" },
-            { status: Status.FAILURE, resource: "MongoDB collection 16", info: "Line 2 blah was not successful." },
-            { status: Status.SKIPPED, resource: "MongoDB collection 31", info: "Line 3 blah didn't run!" }
-        ]
-    };
 
-    //This needed to get the into the workflow!!!
-    console.log(JSON.stringify(runResult));
-
-    return runResult;
+const runResult: ScriptRunResult = {
+    overallStatus: Status.FAILURE,
+    overallInfo: "THIS IS JUST AN EXAMPLE SCRIPT!",
+    details: [
+        { status: Status.SUCCESS, resource: "MongoDB AddOns collection1", info: "Update was successful" },
+        { status: Status.FAILURE, resource: "MongoDB AddOns collection2", info: "Update was not successful." },
+        { status: Status.SKIPPED, resource: "MongoDB AddOns collection3", info: "Update didn't run!" }
+    ]
 };
 
-run();
+validate(runResult);
