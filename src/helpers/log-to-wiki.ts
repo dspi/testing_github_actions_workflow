@@ -55,6 +55,7 @@ export const createWikiSummary = () => {
     if (scriptRunResult.overallInfo) {
         const runInfoContent = scriptRunResult.overallInfo;
         console.log(runInfoContent);
+        runInfoTable += `\n`;
         runInfoTable += `| Run Information |\n`;
         runInfoTable += `|:---|\n`;
         runInfoTable += `| ${runInfoContent} |\n`;
