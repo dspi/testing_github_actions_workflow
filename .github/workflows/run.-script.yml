@@ -60,6 +60,31 @@ jobs:
 
 
 
+          # TS FILE VALIDATION:
+          
+          TS_SCRIPT_NAME="${SCRIPT_NAME%.js}.ts"
+          TS_BASE_PATH="./src/scripts"
+          TS_SCRIPT_PATH="$TS_BASE_PATH/$TS_SCRIPT_NAME"
+          
+          # Check if the TypeScript script exists
+          if [[ ! -f "$TS_SCRIPT_PATH" ]]; then
+            echo "Error: TypeScript script '$TS_SCRIPT_PATH' does not exist."
+            exit 1
+          fi
+          
+          # Check if the 'validate' function is imported
+          if ! grep -qE "import\s+\{\s*validate\s*\}\s+from\s+['\"]\.\.\/helpers\/validation['\"];" "$TS_SCRIPT_PATH"; then
+            echo "Error: The script must import the 'validate' function from '../helpers/validation'."
+            exit 1
+          fi
+          
+          # Check if the 'validate' function is called
+          if ! grep -qE "\bvalidate\s*\(" "$TS_SCRIPT_PATH"; then
+            echo "Error: The 'validate' function must be called in the script."
+            exit 1
+          fi
+
+
 
 
           # Save for later steps
