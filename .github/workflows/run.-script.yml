@@ -103,7 +103,7 @@ jobs:
           CONFIG_NAME="${{ github.event.inputs.script-config }}"
           if CONFIG_NAME; then
           
-            BASE_PATH="./.build/scripts/config"
+            BASE_PATH="./src/scripts/config"
           
             # Ensure .json extension is present
             if [[ "$CONFIG_NAME" != *.json ]]; then
