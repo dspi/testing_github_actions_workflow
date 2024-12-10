@@ -8,6 +8,11 @@ on:
         required: true
         default: 'example-script'
 
+      script-config:
+        description: 'Script config to pass to script (choose from src/scripts/config/)'
+        required: false
+        default: 'example-config-collections'
+        
       environment:
         description: 'Select the deployment environment'
         type: choice
