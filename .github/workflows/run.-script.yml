@@ -101,7 +101,7 @@ jobs:
         id: validate-config
         run: |
           CONFIG_NAME="${{ github.event.inputs.script-config }}"
-          if CONFIG_NAME; then
+          if [ -n "$CONFIG_NAME" ]; then
           
             BASE_PATH="./src/scripts/config"
           
