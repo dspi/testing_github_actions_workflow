@@ -14,7 +14,7 @@ const config = args[0] ? JSON.parse(args[0]) : null;
 //2 - Build up a ScriptRunResult object:
 const runResult: ScriptRunResult = {
     overallStatus: Status.FAILURE,
-    overallInfo: `THIS IS JUST AN EXAMPLE SCRIPT, with config: ${config}`,
+    overallInfo: `THIS IS JUST AN EXAMPLE SCRIPT, with config: '${JSON.stringify(config)}'`,
     details: [
         { status: Status.SUCCESS, resource: "MongoDB AddOns collection1", info: "Update was successful." },
         { status: Status.FAILURE, resource: "MongoDB AddOns collection2", info: "Update was not successful." },
