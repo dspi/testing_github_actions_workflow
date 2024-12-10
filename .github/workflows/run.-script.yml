@@ -132,7 +132,7 @@ jobs:
           CONFIG_FILE="${{ steps.config_path.outputs.config_path }}"
           JSON_DATA=$(cat "$CONFIG_FILE")
           # echo "Running script with JSON config."
-          output=$(node ${{ env.script_path "$JSON_DATA }})
+          output=$(node "${{ env.script_path }}" "$JSON_DATA")
           echo "script_output=$output" >> $GITHUB_ENV
 
         
