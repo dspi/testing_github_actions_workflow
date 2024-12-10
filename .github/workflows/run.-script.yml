@@ -101,6 +101,7 @@ jobs:
         id: validate-config
         run: |
           CONFIG_NAME="${{ github.event.inputs.script-config }}"
+          # Check if CONFIG_NAME is non-empty
           if [ -n "$CONFIG_NAME" ]; then
           
             BASE_PATH="./src/scripts/config"
@@ -125,11 +126,11 @@ jobs:
           
       - name: Run script with config
         id: run-script-with-config
-        if: steps.config_path.outputs.config_path != ''
+        if: env.config_path != ''
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
-          CONFIG_FILE="${{ steps.config_path.outputs.config_path }}"
+          CONFIG_FILE="${{ env.config_path }}"
           JSON_DATA=$(cat "$CONFIG_FILE")
           # echo "Running script with JSON config."
           output=$(node "${{ env.script_path }}" "$JSON_DATA")
