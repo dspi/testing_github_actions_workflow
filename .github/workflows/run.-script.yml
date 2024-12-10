@@ -97,7 +97,48 @@ jobs:
           echo "script_path=$SCRIPT_PATH" >> $GITHUB_ENV
 
 
+      - name: Validate config
+        id: validate-config
+        run: |
+          CONFIG_NAME="${{ github.event.inputs.script-config }}"
+          if CONFIG_NAME; then
+          
+            BASE_PATH="./.build/scripts/config"
+          
+            # Ensure .json extension is present
+            if [[ "$CONFIG_NAME" != *.json ]]; then
+              CONFIG_NAME="$CONFIG_NAME.json"
+            fi
+          
+            CONFIG_PATH="$BASE_PATH/$CONFIG_NAME"
+  
+            # Validate that the script exists
+            if [[ ! -f "$CONFIG_PATH" ]]; then
+              echo "Error: Config '$CONFIG_PATH' does not exist."
+              exit 1
+            fi
+
+            # Save for later steps
+            echo "config_path=$CONFIG_PATH" >> $GITHUB_ENV
+            
+          fi
+          
+      - name: Run script with config
+        id: run-script-with-config
+        if: steps.config_path.outputs.config_path != ''
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: |
+          CONFIG_FILE="${{ steps.config_path.outputs.config_path }}"
+          JSON_DATA=$(cat "$CONFIG_FILE")
+          # echo "Running script with JSON config."
+          output=$(node ${{ env.script_path "$JSON_DATA }})
+          echo "script_output=$output" >> $GITHUB_ENV
+
+        
       - name: Run script
+        # If the config file does not exist, run the script without the JSON data
+        if: steps.config_path.outputs.config_path == ''
         id: run-script
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
