@@ -1,3 +1,5 @@
+name: 🧪 Artifact Consumer Workflow
+
 on:
   workflow_run:
     workflows: ["🔬 Artifact Producer Workflow"]
