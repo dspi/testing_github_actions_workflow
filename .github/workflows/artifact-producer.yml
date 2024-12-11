@@ -1,7 +1,9 @@
 name: 🔬 Artifact Producer Workflow
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   producer:
@@ -10,14 +12,13 @@ jobs:
       - name: Create artifact
         run: |
           echo "This is an artifact for run ID: ${{ github.run_id }}" > dynamic-artifact-${{ github.run_id }}.txt
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-artifact-${{ github.run_id }}
           path: dynamic-artifact-${{ github.run_id }}.txt
-      - name: Set output for consumer
+
+      - name: Set output for artifact name
         id: set_output
         run: echo "::set-output name=artifact_name::dynamic-artifact-${{ github.run_id }}"
-
-
-
