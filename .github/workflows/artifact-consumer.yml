@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download the artifact dynamically
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ github.event.workflow_run.output.artifact_name }}
+          name: dynamic-artifact-${{ github.event.workflow_run.head_commit.id }}
