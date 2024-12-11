@@ -2,20 +2,18 @@ name: 🔬 Artifact Producer
 
 on:
   workflow_dispatch:
+    inputs:
+      producer_run_id:
+        description: "The run ID of the producer workflow"
+        required: true
+        type: string
 
 jobs:
-  produce_artifact:
-    name: Upload Static Artifact
+  consume_artifact:
+    name: Download Artifact from Producer
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create artifact file
-        run: echo "This is artifact from run ID: ${{ github.run_id }}" > artifact.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
           name: static-artifact
-          path: artifact.txt
