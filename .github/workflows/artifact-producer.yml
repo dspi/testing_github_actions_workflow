@@ -4,11 +4,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  consume_artifact:
-    name: Download Artifact from Producer
+  produce_artifact:
+    name: Upload Static Artifact
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create artifact file
+        run: |
+          echo "This is the artifact from run ID: $GITHUB_RUN_ID" > artifact.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: static-artifact
+          path: artifact.txt
