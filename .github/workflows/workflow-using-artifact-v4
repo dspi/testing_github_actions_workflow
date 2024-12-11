@@ -1,0 +1,26 @@
+name: Test Artifact v4
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create test file
+        run: echo "Hello, World!" > test-file.txt
+
+      - name: Upload artifact with unique name
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifact-${{ github.run_id }}
+          path: test-file.txt
+
+      - name: Download artifact with unique name
+        uses: actions/download-artifact@v4
+        with:
+          name: test-artifact-${{ github.run_id }}
+          path: downloaded
