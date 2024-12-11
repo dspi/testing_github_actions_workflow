@@ -17,7 +17,8 @@ jobs:
       - name: Upload artifact with dynamic name
         uses: actions/upload-artifact@v4
         with:
-          name: test-artifact-${{ github.run_id }}
+          # name: test-artifact-${{ github.run_id }} # DYNAMIC NAME - should be able to run twice concurrently without errors.
+          name: test-artifact                 # STATIC NAME - second concurrent run should result in naming conflict errors.
           path: test_artifact.txt
 
   download_artifact:
@@ -31,4 +32,5 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: test-artifact-${{ github.run_id }}
+          # name: test-artifact-${{ github.run_id }} # DYNAMIC NAME
+          name: test-artifact                      # STATIC NAME
