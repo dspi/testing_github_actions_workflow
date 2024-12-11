@@ -1,0 +1,19 @@
+name: 🧪 Artifact Consumer
+
+on:
+  workflow_dispatch:
+    inputs:
+      producer_run_id:
+        description: "The run ID of the producer workflow"
+        required: true
+        type: string
+
+jobs:
+  consume_artifact:
+    name: Download Artifact from Producer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: static-artifact
