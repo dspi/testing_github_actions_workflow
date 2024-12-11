@@ -16,7 +16,15 @@ jobs:
           echo "This is the artifact from run ID: ${{ github.run_id }}" > artifact.txt
 
       - name: Upload artifact
+        # id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-artifact-${{ github.run_id }}
           path: artifact.txt
+
+      - name: Set run_id output
+        id: set_output
+        run: echo "run_id=${{ github.run_id }}" >> $GITHUB_ENV
+
+    outputs:
+      run_id: ${{ steps.set_output.outputs.run_id }}
