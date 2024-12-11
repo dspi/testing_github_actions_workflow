@@ -1,0 +1,26 @@
+name: Test Artifact v3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create test file
+        run: echo "Hello, World!" > test-file.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-artifact
+          path: test-file.txt
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: test-artifact
+          path: downloaded
