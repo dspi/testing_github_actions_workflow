@@ -5,7 +5,7 @@ on:
 
 jobs:
   produce_artifact:
-    name: Upload Static Artifact
+    name: Upload Dynamically Named Artifact
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -19,5 +19,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           # name: static-artifact
-          name: static-artifact${{ github.run_id }} # DYNAMIC NAME
+          name: dynamic-artifact-${{ github.run_id }} # DYNAMIC NAME
           path: artifact.txt
+
+      # Outputting the artifact name from the producer is not strictly necessary if the
+      # consumer can dynamically determine the artifact name using other methods, eg:
+      # - Dynamic retrieval with 'github.run_id' if the workflows are in the same run
+      # - Using the GitHub API to Query Artifacts
+      
+      # Pass the generated artifact name as an output for the consumer to reference:
+      # - name: Set output for artifact name
+      #   id: set-output
+      #   run: echo "artifact-name=artifact-${{ github.run_id }}" >> $GITHUB_ENV
