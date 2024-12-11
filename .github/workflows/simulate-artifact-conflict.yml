@@ -1,0 +1,34 @@
+name: Simulate Artifact Conflict
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload_artifact:
+    name: Upload Dynamic Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create a test file
+        run: echo "This is a test artifact" > test_artifact.txt
+
+      - name: Upload artifact with dynamic name
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifact-${{ github.run_id }}
+          path: test_artifact.txt
+
+  download_artifact:
+    name: Download Dynamic Artifact
+    runs-on: ubuntu-latest
+    needs: upload_artifact
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-artifact-${{ github.run_id }}
