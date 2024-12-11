@@ -16,4 +16,5 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: static-artifact
+          # name: static-artifact
+          name: static-artifact${{ github.run_id }} # DYNAMIC NAME
