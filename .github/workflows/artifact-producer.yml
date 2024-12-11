@@ -1,30 +1,24 @@
-name: 🔬 Artifact Producer
+name: 🔬 Artifact Producer Workflow
 
 on:
   workflow_dispatch:
 
 jobs:
-  produce_artifact:
-    name: Upload Dynamically Named Artifact
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Generate artifact file
+      - name: Create artifact dynamically
         run: |
-          echo "This is the artifact from run ID: ${{ github.run_id }}" > artifact.txt
+          echo "This is an artifact for run ID: ${{ github.run_id }}" > dynamic-artifact-${{ github.run_id }}.txt
 
-      - name: Upload artifact
-        # id: upload_artifact
+      - name: Upload artifact with dynamic name
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-artifact-${{ github.run_id }}
-          path: artifact.txt
+          path: dynamic-artifact-${{ github.run_id }}.txt
 
-      - name: Set run_id output
-        id: set_output
-        run: echo "run_id=${{ github.run_id }}" >> $GITHUB_ENV
 
-    outputs:
-      run_id: ${{ steps.set_output.outputs.run_id }}
