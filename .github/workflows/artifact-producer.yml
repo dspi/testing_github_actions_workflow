@@ -2,11 +2,6 @@ name: 🔬 Artifact Producer
 
 on:
   workflow_dispatch:
-    inputs:
-      producer_run_id:
-        description: "The run ID of the producer workflow"
-        required: true
-        type: string
 
 jobs:
   consume_artifact:
