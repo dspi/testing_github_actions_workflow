@@ -1,4 +1,4 @@
-name: 🧪 Artifact Producer
+name: 🔬 Artifact Producer
 
 on:
   workflow_dispatch:
