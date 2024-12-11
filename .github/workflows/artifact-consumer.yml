@@ -7,13 +7,10 @@ on:
       - completed
 
 jobs:
-  download:
+  download-artifact:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: dynamic-artifact-${{ github.run_id }}
+          name: ${{ github.event.workflow_run.outputs.artifact_name }}
