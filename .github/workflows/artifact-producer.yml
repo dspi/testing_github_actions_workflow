@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      artifact_name: ${{ steps.upload-artifact.outputs.artifact-name }
+      artifact_name: ${{ steps.upload-artifact.outputs.artifact-name }}
       
     steps:
       - name: Checkout code
