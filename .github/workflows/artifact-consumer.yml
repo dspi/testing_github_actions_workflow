@@ -9,16 +9,11 @@ on:
 jobs:
   download:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get artifact name from the producer
-        run: |
-          echo "The artifact name is: ${{ needs.producer.outputs.artifact_name }}"
-        
-      - name: Download artifact dynamically
+      - name: Download the artifact dynamically
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.producer.outputs.artifact_name }}
+          name: ${{ github.event.workflow_run.output.artifact_name }}
