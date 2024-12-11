@@ -1,0 +1,21 @@
+name: 🔬 Artifact Producer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  produce_artifact:
+    name: Upload Static Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create artifact file
+        run: echo "This is artifact from run ID: ${{ github.run_id }}" > artifact.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-artifact
+          path: artifact.txt
