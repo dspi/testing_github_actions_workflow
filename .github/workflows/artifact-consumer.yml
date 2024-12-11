@@ -16,4 +16,4 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: dynamic-artifact-${{ github.event.workflow_run.head_commit.id }}
+          name: dynamic-artifact-${{ github.run_id }}
