@@ -4,24 +4,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  producer:
     runs-on: ubuntu-latest
-    outputs:
-      artifact_name: ${{ steps.upload-artifact.outputs.artifact-name }}
-      
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Create artifact dynamically
+      - name: Create artifact
         run: |
           echo "This is an artifact for run ID: ${{ github.run_id }}" > dynamic-artifact-${{ github.run_id }}.txt
-
-      - name: Upload artifact with dynamic name
-        id: upload-artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-artifact-${{ github.run_id }}
           path: dynamic-artifact-${{ github.run_id }}.txt
+      - name: Set output for consumer
+        id: set_output
+        run: echo "::set-output name=artifact_name::dynamic-artifact-${{ github.run_id }}"
+
 
 
