@@ -6,7 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    outputs:
+      artifact_name: ${{ steps.upload-artifact.outputs.artifact-name }
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,6 +18,7 @@ jobs:
           echo "This is an artifact for run ID: ${{ github.run_id }}" > dynamic-artifact-${{ github.run_id }}.txt
 
       - name: Upload artifact with dynamic name
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-artifact-${{ github.run_id }}
