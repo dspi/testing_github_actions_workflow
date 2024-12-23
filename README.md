@@ -1,4 +1,5 @@
 # testing_github_actions_workflow
 
 Test display of SVG files:
-<img src="cp-rtp-tool - 🚀 Prepare RTP (Run RTP Checks) - workflow diagram.svg" alt="Workflow Diagram" width="500">
+
+<img src="cp-rtp-tool - 🚀 Prepare RTP (Run RTP Checks) - workflow diagram.svg" alt="Workflow Diagram" width="auto">
