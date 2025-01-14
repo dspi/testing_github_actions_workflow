@@ -1,0 +1,37 @@
+name: Test CloudFront Update Simulation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  simulate-cloudfront-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Simulate CloudFront distribution updates
+        run: |
+          # Get GitHub variables
+          distribution_ids=${{ secrets.CLOUDFRONT_DISTRIB_IDS }}
+          origin_names=${{ secrets.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
+
+          # Convert distribution_ids and origin_names to arrays
+          IFS=',' read -r -a distribution_id_array <<< "$distribution_ids"
+          IFS=',' read -r -a origin_names_array <<< "$origin_names"
+
+          # Process each distribution ID
+          for distribution_id in "${distribution_id_array[@]}"; do
+            echo "Simulating update for distribution ID: $distribution_id"
+            
+            # Simulate fetching distribution config (no actual AWS call)
+            echo "Got distribution config for: $distribution_id"
+            
+            # Process each origin name
+            for origin_name in "${origin_names_array[@]}"; do
+              echo "Simulating update for origin: $origin_name in distribution $distribution_id"
+              # Simulate updating origin (no actual AWS call)
+              echo "Updated origin $origin_name in distribution $distribution_id"
+            done
+          done
