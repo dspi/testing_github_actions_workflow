@@ -1,0 +1,42 @@
+name: Test Looping Script & Array Vars
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment: dev, acc, prev or prod'
+        type: environment
+        required: true
+
+jobs:
+  update_cloudfront_timeout:
+    name: ⏱️ Update CloudFront Timeout
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Configure AWS credentials
+        # uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.PUSH_AWS_REGION }}
+
+      - name: Update CloudFront distributions
+        run: |
+          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
+          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
+          
+          for distribution_id in $distribution_ids; do
+            echo "Processing distribution ID: $distribution_id"
+            aws cloudfront get-distribution-config --id $distribution_id > distribution-config.json
+            echo "Got distribution config for: $distribution_id"
+          
+            for origin_name in $(echo $origin_names | jq -r '.[]'); do
+              echo "Updating origin: $origin_name"
+              jq --arg origin_name "$origin_name" '.DistributionConfig.Origins.Items[] | select(.DomainName==$origin_name) | .OriginReadTimeout = 60 | .OriginKeepaliveTimeout = 30' distribution-config.json > updated-config.json
+              echo "Updated JSON for origin $origin_name in distribution $distribution_id"
+              ETag=$(jq -r '.ETag' distribution-config.json)
+              aws cloudfront update-distribution --id $distribution_id --distribution-config file://updated-config.json --if-match $ETag
+              echo "Successfully updated origin $origin_name in distribution $distribution_id"
+            done
+          done
