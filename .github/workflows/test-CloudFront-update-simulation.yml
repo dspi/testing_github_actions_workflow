@@ -58,10 +58,8 @@ jobs:
               echo "$updated_config" > updated-distribution-config.json
 
               # Extract the updated ETag (mocked)
-              # ETag=$(echo "$updated_config" | jq -r '.ETag')
               ETag=$(jq -r '.ETag' distribution-config.json)
-
-              echo "Updated ETag: $ETag"
+              echo "ETag: $ETag"
               
               # Print the updated config (simulating what would be sent to AWS)
               echo "Updated JSON for origin $origin_name in distribution $distribution_id"
