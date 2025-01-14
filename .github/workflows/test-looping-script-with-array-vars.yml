@@ -1,42 +1,61 @@
-name: Test Looping Script & Array Vars
+name: Test CloudFront Update Simulation
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment: dev, acc, prev or prod'
-        type: environment
-        required: true
 
 jobs:
-  update_cloudfront_timeout:
-    name: ⏱️ Update CloudFront Timeout
+  simulate-cloudfront-update:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.PUSH_AWS_REGION }}
+    
+    env:
+      # Set environment variables for testing
+      ORIGIN_NAMES: '["originname1", "originname2"]'  # Mocked origin names
+      DISTRIBUTION_ID: 'EXAMPLE123456'  # Mocked distribution ID
 
-      - name: Update CloudFront distributions
+    steps:
+      # Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Create a mock distribution-config.json for testing
+      - name: Create mock distribution-config.json
         run: |
-          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
-          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
-          
-          for distribution_id in $distribution_ids; do
-            echo "Processing distribution ID: $distribution_id"
-            aws cloudfront get-distribution-config --id $distribution_id > distribution-config.json
-            echo "Got distribution config for: $distribution_id"
-          
-            for origin_name in $(echo $origin_names | jq -r '.[]'); do
-              echo "Updating origin: $origin_name"
-              jq --arg origin_name "$origin_name" '.DistributionConfig.Origins.Items[] | select(.DomainName==$origin_name) | .OriginReadTimeout = 60 | .OriginKeepaliveTimeout = 30' distribution-config.json > updated-config.json
-              echo "Updated JSON for origin $origin_name in distribution $distribution_id"
-              ETag=$(jq -r '.ETag' distribution-config.json)
-              aws cloudfront update-distribution --id $distribution_id --distribution-config file://updated-config.json --if-match $ETag
-              echo "Successfully updated origin $origin_name in distribution $distribution_id"
-            done
+          echo '{
+            "ETag": "EXAMPLE_ETAG_VALUE",
+            "DistributionConfig": {
+              "Origins": {
+                "Items": [
+                  { "DomainName": "originname1", "OriginReadTimeout": 30, "OriginKeepaliveTimeout": 10 },
+                  { "DomainName": "originname2", "OriginReadTimeout": 40, "OriginKeepaliveTimeout": 15 }
+                ]
+              }
+            }
+          }' > distribution-config.json
+
+      # Simulate the loop with JSON parsing and AWS CLI command (without actual AWS calls)
+      - name: Simulate CloudFront Update Loop
+        run: |
+          # Loop through the origin names stored in the GitHub variable
+          for origin_name in $(echo $ORIGIN_NAMES | jq -r '.[]'); do
+            echo "Updating origin: $origin_name"
+            
+            # Simulate updating the JSON
+            jq --arg origin_name "$origin_name" \
+              '.DistributionConfig.Origins.Items[] | select(.DomainName==$origin_name) | .OriginReadTimeout = 60 | .OriginKeepaliveTimeout = 30' \
+              distribution-config.json > updated-config.json
+              
+            echo "Updated JSON for origin $origin_name"
+            
+            # Simulate extracting the ETag value from the original JSON
+            ETag=$(jq -r '.ETag' distribution-config.json)
+            echo "ETag: $ETag"  # Check the value of ETag
+            
+            # Simulate the AWS CLI call
+            echo "Simulating AWS CLI update-distribution with ETag: $ETag and updated-config.json"
+            
+            # Simulate a successful update
+            echo "Successfully updated origin $origin_name in distribution $DISTRIBUTION_ID"
           done
