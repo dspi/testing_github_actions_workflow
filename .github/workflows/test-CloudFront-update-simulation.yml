@@ -19,8 +19,8 @@ jobs:
           echo "Starting simulation..."
           
           # Access environment variables
-          distribution_ids="$CLOUDFRONT_DISTRIB_IDS"
-          origin_names="$CLOUDFRONT_DISTRIB_ORIGIN_NAMES"
+          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
+          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
 
           echo "Distribution IDs: $distribution_ids"
           echo "Origin Names: $origin_names"
