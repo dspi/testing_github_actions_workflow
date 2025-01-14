@@ -60,7 +60,7 @@ jobs:
 
                 # Print the updated JSON
                 echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
-                cat updated-config.json
+                echo cat updated-config.json
                 
               #---
               
