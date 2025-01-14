@@ -55,13 +55,8 @@ jobs:
                   | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
               #FOR SIMULATION ONLY:
-              updated_config=$(echo "$distribution_config" | jq \
-                --arg origin_name "$origin_name" \
-                '(.DistributionConfig.Origins.Items[] 
-                  | select(.DomainName == $origin_name) 
-                  | .CustomOriginConfig.OriginReadTimeout = 60 
-                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')\
-                distribution-config.json > updated-config.json  # THIS IS FOR SIMULATION ONLY
+              jq --arg origin_name "$origin_name" '.DistributionConfig.Origins.Items[] | select(.DomainName==$origin_name) | .OriginReadTimeout = 60 | .OriginKeepaliveTimeout = 30' distribution-config.json > updated-config.json
+
 
                 # Print the updated JSON
                 echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
