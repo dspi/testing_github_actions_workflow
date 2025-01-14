@@ -34,5 +34,19 @@ jobs:
             
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
+
+              # Mock updating JSON
+              echo "Mock: Updating JSON for origin $origin_name in distribution $distribution_id"
+              mock_updated_config="mock-updated-config.json"
+              echo "{ \"DistributionID\": \"$distribution_id\", \"OriginName\": \"$origin_name\", \"Updated\": true }" > $mock_updated_config
+              echo "Mock: Updated config saved to $mock_updated_config"
+
+              # Mock fetching ETag
+              mock_etag="mock-etag-$distribution_id"
+              echo "Mock: ETag: $mock_etag"
+              
+              # Mock applying update
+              echo "Mock: Applying update to distribution $distribution_id with ETag $mock_etag"
+              echo "Mock: Successfully updated origin $origin_name in distribution $distribution_id"
             done
           done
