@@ -60,7 +60,7 @@ jobs:
                 '(.DistributionConfig.Origins.Items[] 
                   | select(.DomainName == $origin_name) 
                   | .CustomOriginConfig.OriginReadTimeout = 60 
-                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')\
                 distribution-config.json > updated-config.json  # THIS IS FOR SIMULATION ONLY
 
                 # Print the updated JSON
