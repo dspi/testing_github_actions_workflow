@@ -58,7 +58,8 @@ jobs:
               echo "$updated_config" > updated-distribution-config.json
 
               # Extract the updated ETag (mocked)
-              ETag=$(echo "$updated_config" | jq -r '.ETag')
+              # ETag=$(echo "$updated_config" | jq -r '.ETag')
+              ETag=$(jq -r '.ETag' distribution-config.json)
 
               echo "Updated ETag: $ETag"
               
