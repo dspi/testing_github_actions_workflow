@@ -2,6 +2,11 @@ name: Test CloudFront Update Simulation
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment: dev, acc, prev or prod'
+        type: environment
+        required: true
 
 jobs:
   simulate-cloudfront-update:
@@ -14,8 +19,8 @@ jobs:
       - name: Simulate CloudFront distribution updates
         run: |
           # Get GitHub variables
-          distribution_ids=${{ secrets.CLOUDFRONT_DISTRIB_IDS }}
-          origin_names=${{ secrets.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
+          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
+          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
 
           # Convert distribution_ids and origin_names to arrays
           IFS=',' read -r -a distribution_id_array <<< "$distribution_ids"
