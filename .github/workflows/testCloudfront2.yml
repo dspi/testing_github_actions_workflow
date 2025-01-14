@@ -49,7 +49,10 @@ jobs:
               # If Origins.Items is missing or empty, simulate it
               echo "Origins.Items is missing, creating default structure for distribution $distribution_id"
               distribution_config=$(echo "$distribution_config" | jq \
-                '.Distribution.DistributionConfig.Origins.Items = [{"DomainName": "originname_1", "CustomOriginConfig": {}}]')
+                '.Distribution.DistributionConfig.Origins.Items = [
+                  {"DomainName": "originname_1", "CustomOriginConfig": {}}, 
+                  {"DomainName": "originname_2", "CustomOriginConfig": {}}
+                ]')
             fi
 
             # Process each origin
