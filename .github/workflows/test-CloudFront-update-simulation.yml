@@ -23,6 +23,12 @@ jobs:
       - name: Simulate CloudFront distribution updates
         run: |
           echo "Starting simulation..."
+
+          # Mock the distribution config (simulating the AWS response)
+          distribution_config=$(cat distribution-config.json)
+
+          echo "Original Distribution Config:"
+          cat distribution-config.json
           
           # Access environment variables
           distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
@@ -39,19 +45,9 @@ jobs:
           for distribution_id in "${distribution_id_array[@]}"; do
             echo "Processing distribution ID: $distribution_id"
             
-            # Mock the distribution config (simulating the AWS response)
-            distribution_config=$(cat distribution-config.json)
-
-            # Mock the distribution config (simulating the AWS response)
-            distribution_config=$(cat distribution-config.json)
-
             # Process each origin
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
-
-              # Debug: Print the distribution config before modification
-              echo "Original distribution config before modification:"
-              echo "$distribution_config" | jq .
               
               # Update the OriginReadTimeout and OriginKeepaliveTimeout for each origin using jq
               updated_config=$(echo "$distribution_config" | jq \
@@ -61,20 +57,15 @@ jobs:
                   | .CustomOriginConfig.OriginReadTimeout = 60 
                   | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
-              # Debug: Print the updated config after modification
-              echo "Updated distribution config after modification:"
-              echo "$updated_config" | jq .
-  
-              # Output the updated config for verification
+              # Print the updated JSON for simulation purposes
               echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
               echo "$updated_config" | jq .
-            
-              # Save the updated config to a new file
+  
+              # Save the updated config to a new file (simulation of what would happen in AWS)
               echo "$updated_config" > updated-distribution-config.json
             
-              # Print the updated config file
-              echo "Updated config saved to updated-distribution-config.json:"
-              cat updated-distribution-config.json
+              # Print the simulated updated config (no AWS interaction, purely local)
+              echo "Updated config saved to updated-distribution-config.json"
             
               # Extract the updated ETag (mocked)
               ETag=$(jq -r '.ETag' distribution-config.json)
