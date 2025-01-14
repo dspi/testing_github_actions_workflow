@@ -19,6 +19,9 @@ jobs:
           CLOUDFRONT_DISTRIB_ORIGIN_NAMES: ${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
         run: |
           echo "Starting simulation..."
+          echo "Starting simulation..."
+          echo "CLOUDFRONT_DISTRIB_IDS from GitHub Vars: $CLOUDFRONT_DISTRIB_IDS"
+          echo "CLOUDFRONT_DISTRIB_ORIGIN_NAMES from GitHub Vars: $CLOUDFRONT_DISTRIB_ORIGIN_NAMES"
           
           # Access environment variables
           distribution_ids="$CLOUDFRONT_DISTRIB_IDS"
