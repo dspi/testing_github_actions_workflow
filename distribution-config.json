@@ -1,0 +1,27 @@
+{
+  "ETag": "etag-1234567890",
+  "DistributionConfig": {
+    "Origins": {
+      "Items": [
+        {
+          "DomainName": "originname1",
+          "Id": "1",
+          "OriginPath": "",
+          "CustomOriginConfig": {
+            "OriginReadTimeout": 30,
+            "OriginKeepaliveTimeout": 5
+          }
+        },
+        {
+          "DomainName": "originname2",
+          "Id": "2",
+          "OriginPath": "",
+          "CustomOriginConfig": {
+            "OriginReadTimeout": 60,
+            "OriginKeepaliveTimeout": 10
+          }
+        }
+      ]
+    }
+  }
+}
