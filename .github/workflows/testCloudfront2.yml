@@ -1,4 +1,4 @@
-name: Test CloudFront Update Simulation2
+name: Test CloudFront Update Simulation
 
 on:
   workflow_dispatch:
@@ -46,13 +46,18 @@ jobs:
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
               
-              # Update the OriginReadTimeout and OriginKeepaliveTimeout for each origin using jq
-              updated_config=$(echo "$distribution_config" | jq \
-                --arg origin_name "$origin_name" \
-                '(.Distribution.DistributionConfig.Origins.Items[] 
-                  | select(.DomainName == $origin_name) 
-                  | .CustomOriginConfig.OriginReadTimeout = 60 
-                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+              # Check if the Origins.Items array exists and is not null
+              if [[ $(echo "$distribution_config" | jq '.Distribution.DistributionConfig.Origins.Items') != "null" ]]; then
+                updated_config=$(echo "$distribution_config" | jq \
+                  --arg origin_name "$origin_name" \
+                  '(.Distribution.DistributionConfig.Origins.Items[] 
+                    | select(.DomainName == $origin_name) 
+                    | .CustomOriginConfig.OriginReadTimeout = 60 
+                    | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+              else
+                echo "Origins.Items is null or missing for distribution $distribution_id"
+                continue
+              fi
 
               # Update JSON using jq and save the updated config to a new file
               jq '.Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.ResponseTimeout = 5 | .Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.KeepaliveTimeout = 5' <<< "$updated_config" > updated-distribution-config.json
