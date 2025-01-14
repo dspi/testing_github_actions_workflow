@@ -1,4 +1,4 @@
-name: Test CloudFront Update Simulation 2
+name: Test CloudFront Update Simulation
 
 on:
   workflow_dispatch:
@@ -46,27 +46,25 @@ jobs:
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
               
-              # Check if the Origins.Items array exists and is not null
-              if [[ $(echo "$distribution_config" | jq '.Distribution.DistributionConfig.Origins.Items') != "null" ]]; then
+              # Check if Origins.Items exists and is an array
+              origins_items=$(echo "$distribution_config" | jq '.Distribution.DistributionConfig.Origins.Items')
+              
+              if [[ "$origins_items" != "null" && "$origins_items" != "[]" ]]; then
                 updated_config=$(echo "$distribution_config" | jq \
                   --arg origin_name "$origin_name" \
                   '(.Distribution.DistributionConfig.Origins.Items[] 
                     | select(.DomainName == $origin_name) 
                     | .CustomOriginConfig.OriginReadTimeout = 60 
                     | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+
+                # Save the updated config to a new file
+                echo "$updated_config" > updated-distribution-config.json
+
+                # Print the updated JSON
+                echo "Updated distribution config after modification:"
+                cat updated-distribution-config.json
               else
-                echo "Origins.Items is null or missing for distribution $distribution_id"
-                continue
+                echo "Origins.Items is missing or empty for distribution $distribution_id"
               fi
-
-              # Update JSON using jq and save the updated config to a new file
-              jq '.Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.ResponseTimeout = 5 | .Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.KeepaliveTimeout = 5' <<< "$updated_config" > updated-distribution-config.json
-
-              # Print the updated JSON
-              echo "Updated distribution config after modification:"
-              cat updated-distribution-config.json
-              
-              # Optionally, save the updated config to a new file (for testing purposes)
-              echo "$updated_config" > updated-distribution-config.json
             done
           done
