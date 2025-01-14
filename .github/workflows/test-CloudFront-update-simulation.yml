@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
 
-    # steps:
-    #   - name: Checkout repository
-    #     uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # - name: Set up jq
-      #   run: sudo apt-get install jq
+      - name: Set up jq
+        run: sudo apt-get install jq
 
       - name: Simulate CloudFront distribution updates
         run: |
