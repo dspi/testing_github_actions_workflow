@@ -54,26 +54,20 @@ jobs:
                   | .CustomOriginConfig.OriginReadTimeout = 60 
                   | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
-              #FOR SIMULATION ONLY:
-              jq --arg origin_name "$origin_name" '.DistributionConfig.Origins.Items[] | select(.DomainName==$origin_name) | .OriginReadTimeout = 60 | .OriginKeepaliveTimeout = 30' distribution-config.json > updated-config.json
-
-
-                # Print the updated JSON
-                echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
-                echo "AND THE UPDATED CONFIG:"
-                cat updated-config.json
+                  # Output the updated config for verification
+                  echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
+                  echo "$updated_config" | jq .
                 
-              #---
-              
-              # Save the updated config to a new file
-              echo "$updated_config" > updated-distribution-config.json
+                  # Save the updated config to a new file
+                  echo "$updated_config" > updated-distribution-config.json
+                
+                  # Print the updated config file
+                  echo "Updated config saved to updated-distribution-config.json:"
+                  cat updated-distribution-config.json
+                
+                  # Extract the updated ETag (mocked)
+                  ETag=$(jq -r '.ETag' distribution-config.json)
+                  echo "ETag: $ETag"
 
-              # Extract the updated ETag (mocked)
-              ETag=$(jq -r '.ETag' distribution-config.json)
-              echo "ETag: $ETag"
-              
-              # Print the updated config (simulating what would be sent to AWS)
-              echo "Updated JSON for origin $origin_name in distribution $distribution_id"
-              echo "$updated_config" | jq .
             done
           done
