@@ -42,9 +42,16 @@ jobs:
             # Mock the distribution config (simulating the AWS response)
             distribution_config=$(cat distribution-config.json)
 
+            # Mock the distribution config (simulating the AWS response)
+            distribution_config=$(cat distribution-config.json)
+
             # Process each origin
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
+
+              # Debug: Print the distribution config before modification
+              echo "Original distribution config before modification:"
+              echo "$distribution_config" | jq .
               
               # Update the OriginReadTimeout and OriginKeepaliveTimeout for each origin using jq
               updated_config=$(echo "$distribution_config" | jq \
@@ -54,6 +61,10 @@ jobs:
                   | .CustomOriginConfig.OriginReadTimeout = 60 
                   | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
+              # Debug: Print the updated config after modification
+              echo "Updated distribution config after modification:"
+              echo "$updated_config" | jq .
+  
               # Output the updated config for verification
               echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
               echo "$updated_config" | jq .
