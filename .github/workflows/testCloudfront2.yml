@@ -1,4 +1,4 @@
-name: Test CloudFront Update Simulation
+name: Test CloudFront Update Simulation 2
 
 on:
   workflow_dispatch:
@@ -42,29 +42,33 @@ jobs:
             # Mock the distribution config (simulating the AWS response)
             distribution_config=$(cat distribution-config.json)
 
+            # Check if Origins.Items exists
+            origins_items=$(echo "$distribution_config" | jq '.Distribution.DistributionConfig.Origins.Items')
+            
+            if [[ "$origins_items" == "null" || "$origins_items" == "[]" ]]; then
+              # If Origins.Items is missing or empty, simulate it
+              echo "Origins.Items is missing, creating default structure for distribution $distribution_id"
+              distribution_config=$(echo "$distribution_config" | jq \
+                '.Distribution.DistributionConfig.Origins.Items = [{"DomainName": "originname_1", "CustomOriginConfig": {}}]')
+            fi
+
             # Process each origin
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
               
-              # Check if Origins.Items exists and is an array
-              origins_items=$(echo "$distribution_config" | jq '.Distribution.DistributionConfig.Origins.Items')
-              
-              if [[ "$origins_items" != "null" && "$origins_items" != "[]" ]]; then
-                updated_config=$(echo "$distribution_config" | jq \
-                  --arg origin_name "$origin_name" \
-                  '(.Distribution.DistributionConfig.Origins.Items[] 
-                    | select(.DomainName == $origin_name) 
-                    | .CustomOriginConfig.OriginReadTimeout = 60 
-                    | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+              # Update the OriginReadTimeout and OriginKeepaliveTimeout for each origin using jq
+              updated_config=$(echo "$distribution_config" | jq \
+                --arg origin_name "$origin_name" \
+                '(.Distribution.DistributionConfig.Origins.Items[] 
+                  | select(.DomainName == $origin_name) 
+                  | .CustomOriginConfig.OriginReadTimeout = 60 
+                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
-                # Save the updated config to a new file
-                echo "$updated_config" > updated-distribution-config.json
+              # Save the updated config to a new file
+              echo "$updated_config" > updated-distribution-config.json
 
-                # Print the updated JSON
-                echo "Updated distribution config after modification:"
-                cat updated-distribution-config.json
-              else
-                echo "Origins.Items is missing or empty for distribution $distribution_id"
-              fi
+              # Print the updated JSON
+              echo "Updated distribution config after modification:"
+              cat updated-distribution-config.json
             done
           done
