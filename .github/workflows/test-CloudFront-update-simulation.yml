@@ -54,20 +54,20 @@ jobs:
                   | .CustomOriginConfig.OriginReadTimeout = 60 
                   | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
 
-                  # Output the updated config for verification
-                  echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
-                  echo "$updated_config" | jq .
-                
-                  # Save the updated config to a new file
-                  echo "$updated_config" > updated-distribution-config.json
-                
-                  # Print the updated config file
-                  echo "Updated config saved to updated-distribution-config.json:"
-                  cat updated-distribution-config.json
-                
-                  # Extract the updated ETag (mocked)
-                  ETag=$(jq -r '.ETag' distribution-config.json)
-                  echo "ETag: $ETag"
+              # Output the updated config for verification
+              echo "Updated JSON for origin $origin_name in distribution $distribution_id:"
+              echo "$updated_config" | jq .
+            
+              # Save the updated config to a new file
+              echo "$updated_config" > updated-distribution-config.json
+            
+              # Print the updated config file
+              echo "Updated config saved to updated-distribution-config.json:"
+              cat updated-distribution-config.json
+            
+              # Extract the updated ETag (mocked)
+              ETag=$(jq -r '.ETag' distribution-config.json)
+              echo "ETag: $ETag"
 
             done
           done
