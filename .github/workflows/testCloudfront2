@@ -1,0 +1,67 @@
+name: Test CloudFront Update Simulation
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment: dev, acc, prev or prod'
+        type: environment
+        required: true
+
+jobs:
+  simulate-cloudfront-update:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up jq
+        run: sudo apt-get install jq
+
+      - name: Simulate CloudFront distribution updates
+        run: |
+          echo "Starting simulation..."
+          
+          # Access environment variables
+          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
+          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
+
+          echo "Distribution IDs: $distribution_ids"
+          echo "Origin Names: $origin_names"
+
+          # Convert strings to arrays
+          IFS=',' read -r -a distribution_id_array <<< "$distribution_ids"
+          IFS=',' read -r -a origin_names_array <<< "$origin_names"
+
+          # Simulate processing each distribution
+          for distribution_id in "${distribution_id_array[@]}"; do
+            echo "Processing distribution ID: $distribution_id"
+            
+            # Mock the distribution config (simulating the AWS response)
+            distribution_config=$(cat distribution-config.json)
+
+            # Process each origin
+            for origin_name in "${origin_names_array[@]}"; do
+              echo "Processing origin name: $origin_name for distribution $distribution_id"
+              
+              # Update the OriginReadTimeout and OriginKeepaliveTimeout for each origin using jq
+              updated_config=$(echo "$distribution_config" | jq \
+                --arg origin_name "$origin_name" \
+                '(.Distribution.DistributionConfig.Origins.Items[] 
+                  | select(.DomainName == $origin_name) 
+                  | .CustomOriginConfig.OriginReadTimeout = 60 
+                  | .CustomOriginConfig.OriginKeepaliveTimeout = 30)')
+
+              # Update JSON using jq and save the updated config to a new file
+              jq '.Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.ResponseTimeout = 5 | .Distribution.DistributionConfig.Origins.Items[].CustomOriginConfig.KeepaliveTimeout = 5' <<< "$updated_config" > updated-distribution-config.json
+
+              # Print the updated JSON
+              echo "Updated distribution config after modification:"
+              cat updated-distribution-config.json
+              
+              # Optionally, save the updated config to a new file (for testing purposes)
+              echo "$updated_config" > updated-distribution-config.json
+            done
+          done
