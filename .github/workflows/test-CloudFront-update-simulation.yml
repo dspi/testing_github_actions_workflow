@@ -14,28 +14,27 @@ jobs:
 
     steps:
       - name: Simulate CloudFront distribution updates
+        env:  # Use env to pass variables from GitHub vars/secrets
+          CLOUDFRONT_DISTRIB_IDS: ${{ vars.CLOUDFRONT_DISTRIB_IDS }}
+          CLOUDFRONT_DISTRIB_ORIGIN_NAMES: ${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
         run: |
-          set -x  # Enable script debugging to show commands as they execute
-        
-          # Get GitHub variables
-          distribution_ids=${{ vars.CLOUDFRONT_DISTRIB_IDS }}
-          origin_names=${{ vars.CLOUDFRONT_DISTRIB_ORIGIN_NAMES }}
+          echo "Starting simulation..."
+          
+          # Access environment variables
+          distribution_ids="$CLOUDFRONT_DISTRIB_IDS"
+          origin_names="$CLOUDFRONT_DISTRIB_ORIGIN_NAMES"
 
-          # Convert distribution_ids and origin_names to arrays
+          echo "Distribution IDs: $distribution_ids"
+          echo "Origin Names: $origin_names"
+
+          # Convert strings to arrays
           IFS=',' read -r -a distribution_id_array <<< "$distribution_ids"
           IFS=',' read -r -a origin_names_array <<< "$origin_names"
 
-          # Process each distribution ID
           for distribution_id in "${distribution_id_array[@]}"; do
-            echo "Simulating update for distribution ID: $distribution_id"
+            echo "Processing distribution ID: $distribution_id"
             
-            # Simulate fetching distribution config (no actual AWS call)
-            echo "Got distribution config for: $distribution_id"
-            
-            # Process each origin name
             for origin_name in "${origin_names_array[@]}"; do
-              echo "Simulating update for origin: $origin_name in distribution $distribution_id"
-              # Simulate updating origin (no actual AWS call)
-              echo "Updated origin $origin_name in distribution $distribution_id"
+              echo "Processing origin name: $origin_name for distribution $distribution_id"
             done
           done
