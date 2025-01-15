@@ -59,8 +59,9 @@ jobs:
             for origin_name in "${origin_names_array[@]}"; do
               echo "Processing origin name: $origin_name for distribution $distribution_id"
               
-               jq '.DistributionConfig.Origins.Items |= map(.CustomOriginConfig.OriginReadTimeout = 60 | .CustomOriginConfig.OriginKeepaliveTimeout = 30)' distribution-config.json > updated-config.json
-
+              jq '.DistributionConfig.Origins.Items |= map(.CustomOriginConfig.OriginReadTimeout = 60 | .CustomOriginConfig.OriginKeepaliveTimeout = 30)' distribution-config.json > updated-config.json
+              echo "Updated JSON for origin $origin_name in distribution $distribution_id"
+              cat updated-config.json
 
               # Save the updated config to a new file
               echo "$updated_config" > updated-distribution-config.json
