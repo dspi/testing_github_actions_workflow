@@ -21,5 +21,7 @@ jobs:
       - name: Commit & sign
         uses: IAreKyleW00t/verified-bot-commit@v1
         with:
-          commit_message: "test signed and verified commit - bump version to ${{ github.event.inputs.new_version }}"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "test signed and verified commit - bump version to ${{ github.event.inputs.new_version }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            package.json
