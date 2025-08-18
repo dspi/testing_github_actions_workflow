@@ -1,0 +1,25 @@
+name: Test Signed and Verified Commits
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: "Version to bump to"
+        required: true
+
+jobs:
+  test-signed-and-verified-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump package.json version
+        run: |
+          jq ".version = \"${{ github.event.inputs.new_version }}\"" package.json > package.tmp.json
+          mv package.tmp.json package.json
+
+      - name: Commit & sign
+        uses: IAreKyleW00t/verified-bot-commit@v1
+        with:
+          commit_message: "test signed and verified commit - bump version to ${{ github.event.inputs.new_version }}"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
