@@ -3,7 +3,7 @@ import {execSync} from "child_process";
 import * as path from "node:path";
 
 const repos = [
-    'git@github.com/dspi/testing_github_actions_workflow.git'
+    'git@personal.github.com/dspi/testing_github_actions_workflow.git'
 ];
 
 for (const repo of repos) {
