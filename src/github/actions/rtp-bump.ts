@@ -1,25 +1,13 @@
-import { execSync } from 'node:child_process';
+import {readdirSync, readFileSync, writeFileSync} from "fs";
+import {join} from "path";
 
-function commitRepo(repoPath: string, message: string, token: string): string | undefined {
-    const output = execSync(
-        `npx verified-bot-commit@latest --workspace ${repoPath} --message "${message}" --token ${token}`,
-        { encoding: 'utf-8' }
-    );
-    // output looks like: "✅ Commit signed and pushed: <sha>"
-    const match = output.match(/([0-9a-f]{40})/);
-    if (!match) throw new Error(`Could not extract commit SHA from output: ${output}`);
-    return match[1];
-}
-
-const repos = [{path:'dspi/testing_github_actions_workflow'}];
-const newVersion = `1.2.0`;
-for (const repo of repos) {
-    // bump files in repo.path first...
-    const sha = commitRepo(
-        repo.path,
-        `Bump version to ${newVersion}`,
-        process.env['GITHUB_TOKEN']!
-    );
-    //applicationResult.commitSha = sha;
-    console.log(sha)
+const reposDir = "./repos";
+for (const repo of readdirSync(reposDir)) {
+    const pkgPath = join(reposDir, repo, "package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+    const [major, minor, patch] = pkg.version.split(".");
+    const newVersion = `${major}.${minor}.${Number(patch) + 1}`;
+    pkg.version = newVersion;
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+    console.log(`${repo}: bumped to ${newVersion}`);
 }

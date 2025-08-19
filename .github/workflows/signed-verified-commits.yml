@@ -1,32 +1,34 @@
-name: Test Signed and Verified Commits
+name: Multi-repo Signed Commits
 
 on:
   workflow_dispatch:
-    inputs:
-      new_version:
-        description: "Version to bump to"
-        required: true
 
 jobs:
-  bump_versions:
+  bump:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # needed for pushing commits
+      contents: write
     steps:
       - uses: actions/checkout@v4
-        # with:
-        # fetch-depth: 0 # not required for committing new changes (only for full history / tags)
+        with:
+          fetch-depth: 0
 
-      #      - name: Setup Node
-      #        uses: actions/setup-node@v4
-      #        with:
-      #          node-version: 20
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      #      - name: Install deps
-      #        run: npm ci
-
-      - name: Run bump+commit per repo
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT || github.token }}
-          RTP_VERSION: ${{ inputs.rtp_version }}
+      - name: Bump versions
         run: node ./.build/github/actions/rtp-bump.js
+
+      # Loop over repos and sign/push each separately
+      - name: Commit + sign for each repo
+        shell: bash
+        run: |
+          for repo in repos/*; do
+            echo "Signing commit for $repo"
+            npx --yes verified-bot-commit \
+              --files "$repo/**" \
+              --message "chore($repo): bump version" \
+              --token "${{ secrets.GH_PAT || github.token }}"
+          done
