@@ -8,20 +8,25 @@ on:
         required: true
 
 jobs:
-  test-signed-and-verified-commits:
+  bump_versions:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed for pushing commits
     steps:
       - uses: actions/checkout@v4
+        # with:
+        # fetch-depth: 0 # not required for committing new changes (only for full history / tags)
 
-      - name: Bump package.json version
-        run: |
-          jq ".version = \"${{ github.event.inputs.new_version }}\"" package.json > package.tmp.json
-          mv package.tmp.json package.json
+      #      - name: Setup Node
+      #        uses: actions/setup-node@v4
+      #        with:
+      #          node-version: 20
 
-      - name: Commit & sign
-        uses: IAreKyleW00t/verified-bot-commit@v1
-        with:
-          message: "test signed and verified commit - bump version to ${{ github.event.inputs.new_version }}"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            package.json
+      #      - name: Install deps
+      #        run: npm ci
+
+      - name: Run bump+commit per repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT || github.token }}
+          RTP_VERSION: ${{ inputs.rtp_version }}
+        run: node ./.build/github/actions/rtp-bump.js
