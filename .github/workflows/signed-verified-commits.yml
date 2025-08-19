@@ -24,7 +24,6 @@ jobs:
       - name: Run bump
         run: node ./.build/github/actions/rtp-bump.js
                - name: Bump versions
-               run: node ./.build/github/actions/rtp-bump.js
 
           # Loop over repos and sign/push each separately
                - name: Commit + sign for each repo
