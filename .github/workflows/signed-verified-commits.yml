@@ -18,17 +18,22 @@ jobs:
         with:
           node-version: 20
 
-      - name: Bump versions
-        run: node ./.build/github/actions/rtp-bump.js
+      - name: Build TypeScript
+        run: npx tsc -p tsconfig.json
 
-      # Loop over repos and sign/push each separately
-      - name: Commit + sign for each repo
-        shell: bash
-        run: |
-          for repo in repos/*; do
-            echo "Signing commit for $repo"
-            npx --yes verified-bot-commit \
-              --files "$repo/**" \
-              --message "chore($repo): bump version" \
-              --token "${{ secrets.GH_PAT || github.token }}"
-          done
+      - name: Run bump
+        run: node ./.build/github/actions/rtp-bump.js
+               - name: Bump versions
+               run: node ./.build/github/actions/rtp-bump.js
+
+          # Loop over repos and sign/push each separately
+               - name: Commit + sign for each repo
+                 shell: bash
+                 run: |
+                   for repo in repos/*; do
+                     echo "Signing commit for $repo"
+                     npx --yes verified-bot-commit \
+                       --files "$repo/**" \
+                       --message "chore($repo): bump version" \
+                       --token "${{ secrets.GH_PAT || github.token }}"
+                   done
