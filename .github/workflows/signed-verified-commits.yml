@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,13 +19,15 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install deps
+        run: npm ci
+
       - name: Build TypeScript
         run: npx tsc -p tsconfig.json
 
-      - name: Run bump
+      - name: Run bump script
         run: node ./.build/github/actions/rtp-bump.js
 
-      # Loop over repos and sign/push each separately
       - name: Commit + sign for each repo
         shell: bash
         run: |
