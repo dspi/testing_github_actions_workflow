@@ -11,7 +11,7 @@ on:
 jobs:
   maybe_skipped:
     name: Maybe Skipped
-    if: ${{ github.event.inputs.run_job }}
+    if: ${{ github.event.inputs.run_job == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "This job ran!"
