@@ -1,0 +1,32 @@
+name: Test Skipped Job Behavior
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_job:
+        type: boolean
+        default: false
+        description: "Whether to run the skippable job or not."
+
+jobs:
+  maybe_skipped:
+    name: Maybe Skipped
+    if: ${{ github.event.inputs.run_job }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job ran!"
+    outputs:
+      message: "Ran successfully"
+
+  always_runs:
+    name: Always Runs
+    needs: [ maybe_skipped ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "This job always runs, even if the previous job was skipped"
+          if [ -f $GITHUB_OUTPUT ]; then
+            echo "Output exists"
+          else
+            echo "No output from skipped job"
+          fi
